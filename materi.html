@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Materi Pembelajaran</title>
+  <title>Materi Pembelajaran - Setrika</title>
   <style>
-    /* === Gaya dasar halaman === */
     body {
       font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
@@ -18,7 +17,6 @@
       min-height: 100vh;
     }
 
-    /* === Tombol kembali === */
     #btnBack {
       position: fixed;
       top: 15px;
@@ -44,7 +42,6 @@
       transform: scale(1.05);
     }
 
-    /* === Judul utama === */
     h1 {
       margin-top: 80px;
       color: #2a4d8f;
@@ -52,7 +49,6 @@
       text-align: center;
     }
 
-    /* === Container slide === */
     .slide-container {
       width: 90%;
       max-width: 900px;
@@ -63,84 +59,39 @@
       gap: 40px;
     }
 
-    /* === Kotak slide === */
-    .slide-box {
-      width: 100%;
-      aspect-ratio: 16 / 9;
+    .download-box {
+      background: white;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background: #000;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* === Teks deskripsi materi === */
-    p {
+      padding: 30px;
       text-align: center;
-      font-size: 16px;
-      color: #333;
-      margin-top: -10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    /* === Responsif untuk layar kecil === */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 18px;
-        margin-top: 60px;
-      }
+    a.download-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #4a90e2;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
 
-      .slide-container {
-        gap: 25px;
-      }
-
-      p {
-        font-size: 14px;
-        margin-top: -5px;
-      }
-
-      #btnBack {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
-      }
+    a.download-btn:hover {
+      background: #3578d3;
     }
   </style>
 </head>
 <body>
-  <!-- Tombol kembali ke dashboard -->
-  <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
-    ⬅️
-  </button>
-
-  <h1>📖 Materi Pembelajaran</h1>
+  <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
+  <h1>📖 Materi Pembelajaran: Setrika</h1>
 
   <div class="slide-container">
-    <!-- Slide Google Materi 1 -->
-    <div class="slide-box">
-      <iframe 
-        src="https://docs.google.com/presentation/d/1Gsm5W-bbhEdwx-Twk9wRjj4PW4nJok3PgLXiftz5I3A/embed?start=false&loop=false&delayms=3000"
-        allowfullscreen
-        title="Slide Materi 1">
-      </iframe>
+    <div class="download-box">
+      <p>Silakan unduh materi pembelajaran setrika dalam format PowerPoint:</p>
+      <a href="assets/Materi_Setrika.pptx" class="download-btn" download>⬇️ Unduh Materi_Setrika.pptx</a>
     </div>
-    <p>Materi 1: Pengantar dan Komponen Setrika</p>
-
-    <!-- Contoh tambahan materi 2 (opsional) -->
-    <!--
-    <div class="slide-box">
-      <iframe 
-        src="https://docs.google.com/presentation/d/e/2PACX-EXAMPLE2/embed?start=false&loop=false&delayms=3000"
-        allowfullscreen
-        title="Slide Materi 2">
-      </iframe>
-    </div>
-    <p>Materi 2: Prinsip Kerja dan Cara Perawatan</p>
-    -->
   </div>
 </body>
 </html>
