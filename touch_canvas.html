@@ -1,31 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Media Interaktif - Setrika (Touch Only)</title>
 <style>
   body {
     font-family: "Poppins", sans-serif;
     background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 80px;
-  }
-
-  h1 {
-    color: #2a4d8f;
-    text-align: center;
-    margin-bottom: 20px;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
   }
 
   #btnBack {
-    position: absolute;
-    top: 15px; left: 15px;
+    position: absolute; top: 15px; left: 15px;
     background: #4a90e2; color: white;
     border: none; border-radius: 50%;
     width: 48px; height: 48px;
@@ -33,134 +22,192 @@
     cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
     z-index: 999; transition: 0.3s;
   }
-
   #btnBack:hover { background: #3578d3; transform: scale(1.05); }
 
-  #canvas_div {
-    text-align: center;
+  h2 { text-align: center; margin-top: 70px; color: #2a4d8f; }
+
+  #controls {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    justify-content: center; margin: 10px 0;
+  }
+  #controls button, #controls select {
+    padding: 8px 14px;
+    border: none; border-radius: 6px;
+    background: #e0e0e0;
+    cursor: pointer; font-size: 15px; transition: 0.2s;
+  }
+  #controls button.active { background: #4a90e2; color: white; }
+
+  #canvasWrapper {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+    width: 100%; max-width: 1200px;
+  }
+  #canvasArea {
+    position: relative;
+    width: 65%; height: 500px;
+    border: 2px solid #ccc; border-radius: 12px;
+    background: transparent; overflow: hidden;
+  }
+  #drawCanvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 4; background: transparent;
+    touch-action: none;
+  }
+  #elements-layer {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 5;
   }
 
-  canvas {
-    border: 2px solid #2a4d8f;
+  #canvasKunci {
+    width: 30%;
+    border: 2px dashed #aaa;
     border-radius: 12px;
-    background-color: white;
-  }
-
-  .controls {
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  button, select {
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    margin: 5px;
-  }
-
-  .element-bar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 25px;
     padding: 10px;
+    background: #fafafa;
+    text-align: center;
+    display: none;
+  }
+  #canvasKunci img {
+    width: 100%; max-height: 480px;
+    object-fit: contain; border-radius: 8px;
   }
 
-  .element-bar img {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
+  .elemen {
+    width: 90px; height: 90px;
+    border: 2px solid #ccc; border-radius: 8px;
+    background: white; display: flex;
+    align-items: center; justify-content: center;
     cursor: grab;
-    transition: transform 0.2s;
+  }
+  .elemen img { width: 80%; height: 80%; object-fit: contain; }
+
+  .resizable {
+    position: absolute;
+    border: none;
+    background: transparent;
+    touch-action: none;
+  }
+  .resizable img {
+    width: 100%; height: 100%;
+    object-fit: contain; pointer-events: none;
   }
 
-  .element-bar img:active {
-    transform: scale(1.1);
+  #elemenList {
+    display: flex; justify-content: center;
+    gap: 10px; flex-wrap: wrap; margin-top: 10px;
   }
 </style>
 </head>
 <body>
+<button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
 
-<button id="btnBack" onclick="window.history.back()">&#8592;</button>
+<h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h2>
 
-<h1>Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h1>
+<div id="controls">
+  <button id="modeDraw">✏️ Mode Gambar</button>
+  <button id="modeDrag" class="active">🖐️ Mode Elemen</button>
+  <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
+  <button id="clearCanvas">🧹 Hapus Gambar</button>
+  <div style="text-align: center; background: #e3f2fd; color: #2a4d8f; font-size: 14px;
+              padding: 6px 10px; border-radius: 8px; margin-top: 10px; width: fit-content;">
+    💡 Tekan lama elemen di kanvas untuk menghapusnya.
+  </div>
+  <select id="selWidth">
+    <option value="6">6</option>
+    <option value="9" selected>9</option>
+    <option value="12">12</option>
+    <option value="15">15</option>
+  </select>
+  <select id="selColor">
+    <option value="black">Hitam</option>
+    <option value="blue" selected>Biru</option>
+    <option value="red">Merah</option>
+    <option value="green">Hijau</option>
+    <option value="yellow">Kuning</option>
+    <option value="gray">Abu</option>
+  </select>
+</div>
 
-<div id="canvas_div">
-  <canvas id="canvas" width="900" height="360"></canvas>
+<div id="canvasWrapper">
+  <div id="canvasArea">
+    <canvas id="drawCanvas"></canvas>
+    <div id="elements-layer"></div>
+  </div>
 
-  <div class="controls">
-    <button onclick="clearArea()">🧹 Clear Area</button>
-    <button id="modeToggle">✏️ Mode: Gambar</button>
-    Line width :
-    <select id="selWidth">
-      <option value="11">11</option>
-      <option value="13" selected>13</option>
-      <option value="15">15</option>
-    </select>
-    Color :
-    <select id="selColor">
-      <option value="black">black</option>
-      <option value="blue" selected>blue</option>
-      <option value="red">red</option>
-      <option value="green">green</option>
-      <option value="yellow">yellow</option>
-      <option value="gray">gray</option>
-    </select>
+  <div id="canvasKunci">
+    <h3>🔍 Susunan Benar</h3>
+    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban" />
   </div>
 </div>
 
-<!-- Elemen Titik A - E -->
-<div class="element-bar" id="elementBar">
-  <img src="assets/titikA.png" alt="Titik A" draggable="false">
-  <img src="assets/titikB.png" alt="Titik B" draggable="false">
-  <img src="assets/titikC.png" alt="Titik C" draggable="false">
-  <img src="assets/titikD.png" alt="Titik D" draggable="false">
-  <img src="assets/titikE.png" alt="Titik E" draggable="false">
+<h4>🎨 Elemen Setrika</h4>
+<div id="elemenList">
+  <div class="elemen"><img src="assets/titikA.png" alt="A" /></div>
+  <div class="elemen"><img src="assets/titikB.png" alt="B" /></div>
+  <div class="elemen"><img src="assets/titikC.png" alt="C" /></div>
+  <div class="elemen"><img src="assets/titikD.png" alt="D" /></div>
+  <div class="elemen"><img src="assets/titikE.png" alt="E" /></div>
 </div>
 
 <script>
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-let mode = 'draw'; // 'draw' atau 'select'
+const drawCanvas = document.getElementById("drawCanvas");
+const ctx = drawCanvas.getContext("2d");
+const canvasArea = document.getElementById("canvasArea");
+const elementsLayer = document.getElementById("elements-layer");
+const btnDraw = document.getElementById("modeDraw");
+const btnDrag = document.getElementById("modeDrag");
+const btnKunci = document.getElementById("toggleKunci");
+const divKunci = document.getElementById("canvasKunci");
+const btnClear = document.getElementById("clearCanvas");
+
+let mode = "drag";
 let ongoingTouches = [];
 let offsetX, offsetY;
 
-// Objek untuk menyimpan elemen yang ditempel di kanvas
-let placedElements = [];
-let activeElement = null;
-let scaleFactor = 1;
+// resize canvas to fit
+function resizeCanvas() {
+  drawCanvas.width = canvasArea.clientWidth;
+  drawCanvas.height = canvasArea.clientHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-// --- MODE PILIH ELEMEN / GAMBAR ---
-document.getElementById("modeToggle").addEventListener("click", () => {
-  if (mode === 'draw') {
-    mode = 'select';
-    document.getElementById("modeToggle").textContent = "🖐️ Mode: Pilih Elemen";
-  } else {
-    mode = 'draw';
-    document.getElementById("modeToggle").textContent = "✏️ Mode: Gambar";
-  }
+function setMode(m) {
+  mode = m;
+  btnDraw.classList.toggle("active", m === "draw");
+  btnDrag.classList.toggle("active", m === "drag");
+  drawCanvas.style.pointerEvents = (m === "draw") ? "auto" : "none";
+}
+btnDraw.addEventListener("click", () => setMode("draw"));
+btnDrag.addEventListener("click", () => setMode("drag"));
+
+btnKunci.addEventListener("click", () => {
+  const visible = divKunci.style.display === "block";
+  divKunci.style.display = visible ? "none" : "block";
+  btnKunci.textContent = visible ? "👁️ Tampilkan Kunci Jawaban" : "🙈 Sembunyikan Kunci Jawaban";
 });
 
-// --- EVENT DRAW MODE ---
-canvas.addEventListener("touchstart", handleStart, false);
-canvas.addEventListener("touchmove", handleMove, false);
-canvas.addEventListener("touchend", handleEnd, false);
-canvas.addEventListener("touchcancel", handleEnd, false);
+btnClear.addEventListener("click", () => {
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+});
+
+// --- DRAW MODE ---
+drawCanvas.addEventListener('touchstart', handleStart, { passive: false });
+drawCanvas.addEventListener('touchend', handleEnd, { passive: false });
+drawCanvas.addEventListener('touchcancel', handleCancel, { passive: false });
+drawCanvas.addEventListener('touchmove', handleMove, { passive: false });
 
 function handleStart(evt) {
-  if (mode !== 'draw') return;
+  if (mode !== "draw") return;
   evt.preventDefault();
   const touches = evt.changedTouches;
-  offsetX = canvas.getBoundingClientRect().left;
-  offsetY = canvas.getBoundingClientRect().top;
+  offsetX = drawCanvas.getBoundingClientRect().left;
+  offsetY = drawCanvas.getBoundingClientRect().top;
   for (let i = 0; i < touches.length; i++) ongoingTouches.push(copyTouch(touches[i]));
 }
-
 function handleMove(evt) {
-  if (mode !== 'draw') return;
+  if (mode !== "draw") return;
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
@@ -179,86 +226,104 @@ function handleMove(evt) {
     }
   }
 }
-
 function handleEnd(evt) {
-  if (mode !== 'draw') return;
+  if (mode !== "draw") return;
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
-    const idx = ongoingTouchIndexById(touches[i].identifier);
+    let idx = ongoingTouchIndexById(touches[i].identifier);
     if (idx >= 0) ongoingTouches.splice(idx, 1);
   }
 }
-
+function handleCancel(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    let idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1);
+  }
+}
 function copyTouch({ identifier, clientX, clientY }) {
   return { identifier, clientX, clientY };
 }
-
 function ongoingTouchIndexById(idToFind) {
   for (let i = 0; i < ongoingTouches.length; i++) {
-    if (ongoingTouches[i].identifier === idToFind) return i;
+    const id = ongoingTouches[i].identifier;
+    if (id === idToFind) return i;
   }
   return -1;
 }
 
-function clearArea() {
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  placedElements = [];
-  drawElements();
+// --- DRAG & PINCH ---
+document.querySelectorAll(".elemen").forEach(el => {
+  el.addEventListener("touchstart", e => {
+    if (mode !== "drag") return;
+    e.preventDefault();
+    const imgSrc = el.querySelector("img").src;
+    const newEl = document.createElement("div");
+    newEl.className = "resizable";
+    newEl.style.left = "50px";
+    newEl.style.top = "50px";
+    newEl.style.width = "100px";
+    newEl.style.height = "100px";
+    const img = document.createElement("img");
+    img.src = imgSrc;
+    newEl.appendChild(img);
+    elementsLayer.appendChild(newEl);
+    initTouchDragZoom(newEl);
+  });
+});
+
+function initTouchDragZoom(el) {
+  let lastDist = null, startX = 0, startY = 0, moving = false;
+  let longPressTimer = null;
+
+  el.addEventListener("touchstart", e => {
+    if (e.touches.length === 1) {
+      moving = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      longPressTimer = setTimeout(() => {
+        moving = false;
+        if (confirm("Hapus elemen ini?")) el.remove();
+      }, 900);
+    } else if (e.touches.length === 2) {
+      moving = false;
+      lastDist = getDistance(e.touches);
+      clearTimeout(longPressTimer);
+    }
+  }, { passive: false });
+
+  el.addEventListener("touchmove", e => {
+    e.preventDefault();
+    clearTimeout(longPressTimer);
+    if (e.touches.length === 1 && moving) {
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+      el.style.left = el.offsetLeft + dx + "px";
+      el.style.top = el.offsetTop + dy + "px";
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      const newDist = getDistance(e.touches);
+      const scale = newDist / lastDist;
+      el.style.width = el.offsetWidth * scale + "px";
+      el.style.height = el.offsetHeight * scale + "px";
+      lastDist = newDist;
+    }
+  }, { passive: false });
+
+  el.addEventListener("touchend", e => {
+    moving = false;
+    lastDist = null;
+    clearTimeout(longPressTimer);
+  });
 }
 
-// --- MENANGANI ELEMEN TITIK A-E ---
-const elementBar = document.getElementById('elementBar');
-elementBar.querySelectorAll("img").forEach(img => {
-  img.addEventListener("touchstart", (e) => {
-    if (mode !== 'select') return;
-    e.preventDefault();
-    const touch = e.changedTouches[0];
-    const newElem = {
-      img: img,
-      x: touch.clientX - canvas.getBoundingClientRect().left - 35,
-      y: touch.clientY - canvas.getBoundingClientRect().top - 35,
-      scale: 1
-    };
-    placedElements.push(newElem);
-    activeElement = newElem;
-    drawElements();
-  });
-});
-
-canvas.addEventListener("touchmove", (e) => {
-  if (mode !== 'select') return;
-  e.preventDefault();
-  const touches = e.touches;
-  if (activeElement && touches.length === 1) {
-    activeElement.x = touches[0].clientX - canvas.getBoundingClientRect().left - 35;
-    activeElement.y = touches[0].clientY - canvas.getBoundingClientRect().top - 35;
-  }
-  if (activeElement && touches.length === 2) {
-    const dist = Math.hypot(
-      touches[0].clientX - touches[1].clientX,
-      touches[0].clientY - touches[1].clientY
-    );
-    if (!activeElement.lastDist) activeElement.lastDist = dist;
-    let scaleChange = dist / activeElement.lastDist;
-    activeElement.scale *= scaleChange;
-    activeElement.lastDist = dist;
-  }
-  drawElements();
-});
-
-canvas.addEventListener("touchend", (e) => {
-  if (activeElement) activeElement.lastDist = null;
-});
-
-function drawElements() {
-  clearArea();
-  placedElements.forEach(el => {
-    const w = 70 * el.scale;
-    const h = 70 * el.scale;
-    ctx.drawImage(el.img, el.x, el.y, w, h);
-  });
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
 }
 </script>
 </body>
