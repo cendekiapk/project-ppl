@@ -2,99 +2,61 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<title>Media Interaktif - Setrika Listrik (Touch)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Media Interaktif - Setrika (Touch Only)</title>
 <style>
   body {
     font-family: "Poppins", sans-serif;
     background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
   #btnBack {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: #4a90e2;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    z-index: 999;
-    transition: 0.3s;
+    position: absolute; top: 15px; left: 15px;
+    background: #4a90e2; color: white;
+    border: none; border-radius: 50%;
+    width: 48px; height: 48px;
+    font-size: 22px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    z-index: 999; transition: 0.3s;
   }
   #btnBack:hover { background: #3578d3; transform: scale(1.05); }
 
-  h2 {
-    text-align: center;
-    margin-top: 70px;
-    color: #2a4d8f;
-  }
+  h2 { text-align: center; margin-top: 70px; color: #2a4d8f; }
 
   #controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 10px 0;
+    display: flex; gap: 10px; flex-wrap: wrap;
+    justify-content: center; margin: 10px 0;
   }
-  #controls button {
+  #controls button, #controls select {
     padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
+    border: none; border-radius: 6px;
     background: #e0e0e0;
-    cursor: pointer;
-    font-size: 15px;
-    transition: 0.2s;
+    cursor: pointer; font-size: 15px; transition: 0.2s;
   }
   #controls button.active { background: #4a90e2; color: white; }
 
   #canvasWrapper {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    max-width: 1200px;
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+    width: 100%; max-width: 1200px;
   }
-
   #canvasArea {
     position: relative;
-    width: 65%;
-    height: 500px;
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    background: white;
-    overflow: hidden;
+    width: 65%; height: 500px;
+    border: 2px solid #ccc; border-radius: 12px;
+    background: transparent; overflow: hidden;
   }
-
   #drawCanvas {
-    position: absolute;
-    top: 0; left: 0;
+    position: absolute; top: 0; left: 0;
     width: 100%; height: 100%;
-    z-index: 2;
-    background: transparent;
+    z-index: 4; background: transparent;
     touch-action: none;
   }
-
   #elements-layer {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 3;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 5;
   }
 
   #canvasKunci {
@@ -107,70 +69,36 @@
     display: none;
   }
   #canvasKunci img {
-    width: 100%;
-    max-height: 480px;
-    object-fit: contain;
-    border-radius: 8px;
-  }
-
-  #elemenContainer {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 1200px;
-  }
-
-  #elemenList {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    width: 100%; max-height: 480px;
+    object-fit: contain; border-radius: 8px;
   }
 
   .elemen {
-    width: 100px;
-    height: 100px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 90px; height: 90px;
+    border: 2px solid #ccc; border-radius: 8px;
+    background: white; display: flex;
+    align-items: center; justify-content: center;
     cursor: grab;
   }
-
-  .elemen img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain;
-  }
+  .elemen img { width: 80%; height: 80%; object-fit: contain; }
 
   .resizable {
     position: absolute;
-    border: 1px dashed #4a90e2;
-    border-radius: 6px;
+    border: none;
     background: transparent;
     touch-action: none;
   }
-
   .resizable img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
+    width: 100%; height: 100%;
+    object-fit: contain; pointer-events: none;
   }
 
-  #petunjuk {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #777;
-    font-size: 16px;
-    text-align: center;
+  #elemenList {
+    display: flex; justify-content: center;
+    gap: 10px; flex-wrap: wrap; margin-top: 10px;
   }
 </style>
 </head>
-
 <body>
 <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
 
@@ -180,31 +108,54 @@
   <button id="modeDraw">✏️ Mode Gambar</button>
   <button id="modeDrag">🖐️ Mode Elemen</button>
   <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
-  <button id="clearCanvas">🧹 Bersihkan Gambar</button>
+  <button id="clearCanvas">🧹 Hapus Gambar</button>
+  <select id="selWidth">
+    <option value="6">6</option>
+    <option value="9" selected>9</option>
+    <option value="12">12</option>
+    <option value="15">15</option>
+  </select>
+  <select id="selColor">
+    <option value="black">Hitam</option>
+    <option value="blue" selected>Biru</option>
+    <option value="red">Merah</option>
+    <option value="green">Hijau</option>
+    <option value="yellow">Kuning</option>
+    <option value="gray">Abu</option>
+  </select>
+</div>
+<div style="
+  text-align: center;
+  background: #e3f2fd;
+  color: #2a4d8f;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  width: fit-content;
+">
+  💡 Tekan lama elemen di kanvas untuk menghapusnya.
 </div>
 
 <div id="canvasWrapper">
   <div id="canvasArea">
     <canvas id="drawCanvas"></canvas>
     <div id="elements-layer"></div>
-    <div id="petunjuk">🧩 Sentuh & seret elemen ke area ini</div>
   </div>
 
   <div id="canvasKunci">
-    <h3>🔍 Kunci Jawaban</h3>
-    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban">
+    <h3>🔍 Susunan Benar</h3>
+    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban" />
   </div>
 </div>
 
-<div id="elemenContainer">
-  <h4 style="text-align:center;">🎨 Elemen Setrika</h4>
-  <div id="elemenList">
-    <div class="elemen" data-id="A"><img src="assets/titikA.png" alt="A" /></div>
-    <div class="elemen" data-id="B"><img src="assets/titikB.png" alt="B" /></div>
-    <div class="elemen" data-id="C"><img src="assets/titikC.png" alt="C" /></div>
-    <div class="elemen" data-id="D"><img src="assets/titikD.png" alt="D" /></div>
-    <div class="elemen" data-id="E"><img src="assets/titikE.png" alt="E" /></div>
-  </div>
+<h4>🎨 Elemen Setrika</h4>
+<div id="elemenList">
+  <div class="elemen"><img src="assets/titikA.png" alt="A" /></div>
+  <div class="elemen"><img src="assets/titikB.png" alt="B" /></div>
+  <div class="elemen"><img src="assets/titikC.png" alt="C" /></div>
+  <div class="elemen"><img src="assets/titikD.png" alt="D" /></div>
+  <div class="elemen"><img src="assets/titikE.png" alt="E" /></div>
 </div>
 
 <script>
@@ -219,10 +170,8 @@ const divKunci = document.getElementById("canvasKunci");
 const btnClear = document.getElementById("clearCanvas");
 
 let mode = "drag";
-let drawing = false;
-let startX, startY;
-let currentColor = "#2a4d8f";
-let currentSize = 4;
+let ongoingTouches = [];
+let offsetX, offsetY;
 
 function resizeCanvas() {
   drawCanvas.width = canvasArea.clientWidth;
@@ -247,44 +196,79 @@ btnKunci.addEventListener("click", () => {
   btnKunci.textContent = visible ? "👁️ Tampilkan Kunci Jawaban" : "🙈 Sembunyikan Kunci Jawaban";
 });
 btnClear.addEventListener("click", () => {
-  ctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
 });
 
-// ✏️ DRAWING TOUCH MODE
-function getTouchPos(e) {
-  const rect = drawCanvas.getBoundingClientRect();
-  const t = e.touches[0];
-  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+// --- DRAWING (from your working version) ---
+function startup() {
+  drawCanvas.addEventListener('touchstart', handleStart, { passive: false });
+  drawCanvas.addEventListener('touchend', handleEnd, { passive: false });
+  drawCanvas.addEventListener('touchcancel', handleCancel, { passive: false });
+  drawCanvas.addEventListener('touchmove', handleMove, { passive: false });
+}
+document.addEventListener("DOMContentLoaded", startup);
+
+function handleStart(evt) {
+  if (mode !== "draw") return;
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  offsetX = drawCanvas.getBoundingClientRect().left;
+  offsetY = drawCanvas.getBoundingClientRect().top;
+  for (let i = 0; i < touches.length; i++) {
+    ongoingTouches.push(copyTouch(touches[i]));
+  }
 }
 
-drawCanvas.addEventListener("touchstart", e => {
-  if (mode !== "draw" || e.touches.length > 1) return;
-  e.preventDefault();
-  const pos = getTouchPos(e);
-  drawing = true;
-  startX = pos.x;
-  startY = pos.y;
-});
-drawCanvas.addEventListener("touchmove", e => {
-  if (!drawing || mode !== "draw" || e.touches.length > 1) return;
-  e.preventDefault();
-  const pos = getTouchPos(e);
-  ctx.beginPath();
-  ctx.moveTo(startX, startY);
-  ctx.lineTo(pos.x, pos.y);
-  ctx.strokeStyle = currentColor;
-  ctx.lineWidth = currentSize;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.stroke();
-  startX = pos.x;
-  startY = pos.y;
-});
-drawCanvas.addEventListener("touchend", e => {
-  if (mode === "draw") drawing = false;
-});
+function handleMove(evt) {
+  if (mode !== "draw") return;
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    const color = document.getElementById('selColor').value;
+    const idx = ongoingTouchIndexById(touches[i].identifier);
+    if (idx >= 0) {
+      ctx.beginPath();
+      ctx.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
+      ctx.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
+      ctx.lineWidth = document.getElementById('selWidth').value;
+      ctx.strokeStyle = color;
+      ctx.lineJoin = "round";
+      ctx.closePath();
+      ctx.stroke();
+      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));
+    }
+  }
+}
 
-// 🧩 DRAG, PINCH & LONG PRESS DELETE
+function handleEnd(evt) {
+  if (mode !== "draw") return;
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    let idx = ongoingTouchIndexById(touches[i].identifier);
+    if (idx >= 0) ongoingTouches.splice(idx, 1);
+  }
+}
+function handleCancel(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    let idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1);
+  }
+}
+function copyTouch({ identifier, clientX, clientY }) {
+  return { identifier, clientX, clientY };
+}
+function ongoingTouchIndexById(idToFind) {
+  for (let i = 0; i < ongoingTouches.length; i++) {
+    const id = ongoingTouches[i].identifier;
+    if (id === idToFind) return i;
+  }
+  return -1;
+}
+
+// --- DRAG & PINCH for elements ---
 document.querySelectorAll(".elemen").forEach(el => {
   el.addEventListener("touchstart", e => {
     if (mode !== "drag") return;
@@ -314,13 +298,9 @@ function initTouchDragZoom(el) {
       moving = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-
-      // ⏱️ Long press detect (1 detik)
       longPressTimer = setTimeout(() => {
         moving = false;
-        if (confirm("Hapus elemen ini?")) {
-          el.remove();
-        }
+        if (confirm("Hapus elemen ini?")) el.remove();
       }, 1000);
     } else if (e.touches.length === 2) {
       moving = false;
@@ -361,6 +341,5 @@ function getDistance(touches) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 </script>
-
 </body>
 </html>
