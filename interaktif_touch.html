@@ -284,7 +284,7 @@ drawCanvas.addEventListener("touchend", e => {
   if (mode === "draw") drawing = false;
 });
 
-// 🧩 DRAG & PINCH ZOOM ELEMENTS
+// 🧩 DRAG, PINCH & LONG PRESS DELETE
 document.querySelectorAll(".elemen").forEach(el => {
   el.addEventListener("touchstart", e => {
     if (mode !== "drag") return;
@@ -307,20 +307,31 @@ document.querySelectorAll(".elemen").forEach(el => {
 
 function initTouchDragZoom(el) {
   let lastDist = null, startX = 0, startY = 0, moving = false;
+  let longPressTimer = null;
 
   el.addEventListener("touchstart", e => {
     if (e.touches.length === 1) {
       moving = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+
+      // ⏱️ Long press detect (1 detik)
+      longPressTimer = setTimeout(() => {
+        moving = false;
+        if (confirm("Hapus elemen ini?")) {
+          el.remove();
+        }
+      }, 1000);
     } else if (e.touches.length === 2) {
       moving = false;
       lastDist = getDistance(e.touches);
+      clearTimeout(longPressTimer);
     }
   }, { passive: false });
 
   el.addEventListener("touchmove", e => {
     e.preventDefault();
+    clearTimeout(longPressTimer);
     if (e.touches.length === 1 && moving) {
       const dx = e.touches[0].clientX - startX;
       const dy = e.touches[0].clientY - startY;
@@ -340,6 +351,7 @@ function initTouchDragZoom(el) {
   el.addEventListener("touchend", e => {
     moving = false;
     lastDist = null;
+    clearTimeout(longPressTimer);
   });
 }
 
@@ -349,5 +361,6 @@ function getDistance(touches) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 </script>
+
 </body>
 </html>
