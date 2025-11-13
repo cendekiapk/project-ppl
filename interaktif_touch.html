@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Media Interaktif - Perbaikan Setrika</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Media Interaktif - Setrika Listrik (Touch)</title>
 <style>
   body {
     font-family: "Poppins", sans-serif;
@@ -14,118 +14,227 @@
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   #btnBack {
     position: absolute;
-    top: 15px; left: 15px;
-    background: #4a90e2; color: white;
-    border: none; border-radius: 50%;
-    width: 48px; height: 48px;
-    font-size: 22px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    z-index: 999; transition: 0.3s;
+    top: 15px;
+    left: 15px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    z-index: 999;
+    transition: 0.3s;
   }
   #btnBack:hover { background: #3578d3; transform: scale(1.05); }
 
-  h2 { text-align: center; margin-top: 70px; color: #2a4d8f; }
+  h2 {
+    text-align: center;
+    margin-top: 70px;
+    color: #2a4d8f;
+  }
 
-  #controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
+  #controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 10px 0;
+  }
   #controls button {
-    padding: 8px 14px; border: none; border-radius: 6px;
-    background: #e0e0e0; cursor: pointer; font-size: 15px; transition: 0.2s;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
   }
   #controls button.active { background: #4a90e2; color: white; }
 
-  #canvasWrapper { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1200px; }
-  #canvas {
-    position: relative; 
-    width: 65%; 
+  #canvasWrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  #canvasArea {
+    position: relative;
+    width: 65%;
     height: 500px;
-    border: 2px solid #ccc; 
-    border-radius: 12px; 
-    background: white; 
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    background: white;
     overflow: hidden;
   }
 
   #drawCanvas {
-    position: absolute; 
-    top:0; left:0; 
-    width:100%; height:100%; 
-    z-index:4; 
-    background:transparent; 
-    touch-action: none; /* penting untuk mencegah scroll saat menggambar */
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    background: transparent;
+    touch-action: none;
   }
 
-  #elements-layer { position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; }
-  #petunjuk { position:absolute; top:45%; left:50%; transform:translate(-50%, -50%); color:#777; font-size:16px; text-align:center; }
+  #elements-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 3;
+  }
 
   #canvasKunci {
-    width: 30%; border: 2px dashed #aaa; border-radius: 12px; padding: 10px;
-    background: #fafafa; text-align: center; display: none;
+    width: 30%;
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fafafa;
+    text-align: center;
+    display: none;
   }
-  #canvasKunci img { width: 100%; max-height: 480px; object-fit: contain; border-radius: 8px; }
+  #canvasKunci img {
+    width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
 
-  #elemenContainer { margin-top: 20px; width: 100%; max-width: 1200px; }
-  #elemenList { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-  .elemen {
-    width: 100px; height: 100px; border: 2px solid #ccc; border-radius: 8px;
-    background:white; display:flex; align-items:center; justify-content:center; cursor: grab;
+  #elemenContainer {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 1200px;
   }
-  .elemen img { width: 80%; height: 80%; object-fit: contain; }
+
+  #elemenList {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .elemen {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+  }
+
+  .elemen img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
 
   .resizable {
-    position: absolute; border: 1px dashed #aaa; border-radius: 6px;
-    background: transparent; cursor: move;
+    position: absolute;
+    border: 1px dashed #4a90e2;
+    border-radius: 6px;
+    background: transparent;
+    touch-action: none;
   }
-  .resizable img { width:100%; height:100%; object-fit:contain; pointer-events:none; }
+
+  .resizable img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
   .resize-handle {
-    position:absolute; bottom:0; right:0; width:14px; height:14px;
-    background:#4a90e2; border-radius:50%; cursor: se-resize;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    background: #4a90e2;
+    border-radius: 50%;
+  }
+
+  #petunjuk {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #777;
+    font-size: 16px;
+    text-align: center;
   }
 </style>
 </head>
-<body>
-<button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">⬅️</button>
 
-<h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik</h2>
+<body>
+<button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
+
+<h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h2>
 
 <div id="controls">
   <button id="modeDraw">✏️ Mode Gambar</button>
-  <button id="modeClick">🖱️ Drag & Drop</button>
-  <button id="undo">↩️ Undo</button>
+  <button id="modeDrag">🖐️ Mode Elemen</button>
   <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
+  <button id="clearCanvas">🧹 Bersihkan Gambar</button>
 </div>
 
 <div id="canvasWrapper">
-  <div id="canvas">
+  <div id="canvasArea">
     <canvas id="drawCanvas"></canvas>
     <div id="elements-layer"></div>
-    <div id="petunjuk">🧩 Silakan seret elemen ke area ini</div>
+    <div id="petunjuk">🧩 Sentuh & seret elemen ke area ini</div>
   </div>
+
   <div id="canvasKunci">
-    <h3>🔍 Susunan Benar</h3>
-    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban" id="imgKunci" />
+    <h3>🔍 Kunci Jawaban</h3>
+    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban">
   </div>
 </div>
 
 <div id="elemenContainer">
-  <h4>🎨 Elemen Setrika</h4>
+  <h4 style="text-align:center;">🎨 Elemen Setrika</h4>
   <div id="elemenList">
-    <div class="elemen" id="elemenA" draggable="true"><img src="assets/titikA.png" alt="A" /></div>
-    <div class="elemen" id="elemenB" draggable="true"><img src="assets/titikB.png" alt="B" /></div>
-    <div class="elemen" id="elemenC" draggable="true"><img src="assets/titikC.png" alt="C" /></div>
-    <div class="elemen" id="elemenD" draggable="true"><img src="assets/titikD.png" alt="D" /></div>
-    <div class="elemen" id="elemenE" draggable="true"><img src="assets/titikE.png" alt="E" /></div>
+    <div class="elemen" data-id="A"><img src="assets/titikA.png" alt="A" /></div>
+    <div class="elemen" data-id="B"><img src="assets/titikB.png" alt="B" /></div>
+    <div class="elemen" data-id="C"><img src="assets/titikC.png" alt="C" /></div>
+    <div class="elemen" data-id="D"><img src="assets/titikD.png" alt="D" /></div>
+    <div class="elemen" data-id="E"><img src="assets/titikE.png" alt="E" /></div>
   </div>
 </div>
 
 <script>
-const canvasArea = document.getElementById("canvas");
 const drawCanvas = document.getElementById("drawCanvas");
 const ctx = drawCanvas.getContext("2d");
+const canvasArea = document.getElementById("canvasArea");
+const elementsLayer = document.getElementById("elements-layer");
+const btnDraw = document.getElementById("modeDraw");
+const btnDrag = document.getElementById("modeDrag");
+const btnKunci = document.getElementById("toggleKunci");
+const divKunci = document.getElementById("canvasKunci");
+const btnClear = document.getElementById("clearCanvas");
 
-// ✅ Pastikan ukuran canvas sesuai div
+let mode = "drag";
+let drawing = false;
+let startX, startY;
+let currentColor = "#2a4d8f";
+let currentSize = 4;
+
+// 🔧 Resize canvas agar sesuai ukuran area
 function resizeCanvas() {
   drawCanvas.width = canvasArea.clientWidth;
   drawCanvas.height = canvasArea.clientHeight;
@@ -133,34 +242,27 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-let mode = "elemen";
-let drawing = false, startX, startY;
-let currentColor = "#2a4d8f", currentSize = 3;
-let lines = [];
-
-const btnDraw = document.getElementById("modeDraw");
-const btnElemen = document.getElementById("modeClick");
-const btnUndo = document.getElementById("undo");
-const btnKunci = document.getElementById("toggleKunci");
-const divKunci = document.getElementById("canvasKunci");
-const elementsLayer = document.getElementById("elements-layer");
-const petunjuk = document.getElementById("petunjuk");
-
-btnDraw.onclick = () => setMode("draw");
-btnElemen.onclick = () => setMode("elemen");
-btnUndo.onclick = () => { if (lines.length > 0) { lines.pop(); redrawAll(); } };
-btnKunci.onclick = () => {
-  divKunci.style.display = divKunci.style.display === "none" || divKunci.style.display === "" ? "block" : "none";
-  btnKunci.textContent = divKunci.style.display === "block" ? "🙈 Sembunyikan Kunci Jawaban" : "👁️ Tampilkan Kunci Jawaban";
-};
-
+// 🧭 Ubah mode
 function setMode(m) {
   mode = m;
   btnDraw.classList.toggle("active", m === "draw");
-  btnElemen.classList.toggle("active", m === "elemen");
+  btnDrag.classList.toggle("active", m === "drag");
   drawCanvas.style.pointerEvents = (m === "draw") ? "auto" : "none";
 }
+setMode("drag");
 
+btnDraw.addEventListener("click", () => setMode("draw"));
+btnDrag.addEventListener("click", () => setMode("drag"));
+btnKunci.addEventListener("click", () => {
+  const visible = divKunci.style.display === "block";
+  divKunci.style.display = visible ? "none" : "block";
+  btnKunci.textContent = visible ? "👁️ Tampilkan Kunci Jawaban" : "🙈 Sembunyikan Kunci Jawaban";
+});
+btnClear.addEventListener("click", () => {
+  ctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+});
+
+// 🖌️ Gambar dengan sentuhan
 function getTouchPos(e) {
   const rect = drawCanvas.getBoundingClientRect();
   const t = e.touches[0];
@@ -168,15 +270,16 @@ function getTouchPos(e) {
 }
 
 drawCanvas.addEventListener("touchstart", e => {
-  if (mode !== "draw" || e.touches.length > 1) return;
+  if (mode !== "draw") return;
   e.preventDefault();
   const pos = getTouchPos(e);
   drawing = true;
-  startX = pos.x; startY = pos.y;
+  startX = pos.x;
+  startY = pos.y;
 }, { passive: false });
 
 drawCanvas.addEventListener("touchmove", e => {
-  if (!drawing || mode !== "draw" || e.touches.length > 1) return;
+  if (!drawing || mode !== "draw") return;
   e.preventDefault();
   const pos = getTouchPos(e);
   ctx.beginPath();
@@ -187,22 +290,80 @@ drawCanvas.addEventListener("touchmove", e => {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.stroke();
-  startX = pos.x; startY = pos.y;
+  startX = pos.x;
+  startY = pos.y;
 }, { passive: false });
 
 drawCanvas.addEventListener("touchend", e => {
-  if (mode === "draw") {
-    drawing = false;
-    lines.push(ctx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
-  }
+  if (mode === "draw") drawing = false;
 }, { passive: false });
 
-function redrawAll() {
-  ctx.clearRect(0,0,drawCanvas.width, drawCanvas.height);
-  for (let snap of lines) ctx.putImageData(snap,0,0);
-}
+// 🧩 Drag & Drop Elemen
+document.querySelectorAll(".elemen").forEach(el => {
+  el.addEventListener("touchstart", e => {
+    if (mode !== "drag") return;
+    e.preventDefault();
+    const imgSrc = el.querySelector("img").src;
+    const newEl = document.createElement("div");
+    newEl.className = "resizable";
+    newEl.style.left = "50px";
+    newEl.style.top = "50px";
+    newEl.style.width = "100px";
+    newEl.style.height = "100px";
 
-setMode("elemen");
+    const img = document.createElement("img");
+    img.src = imgSrc;
+    newEl.appendChild(img);
+
+    const handle = document.createElement("div");
+    handle.className = "resize-handle";
+    newEl.appendChild(handle);
+
+    elementsLayer.appendChild(newEl);
+
+    initTouchDrag(newEl, handle);
+  });
+});
+
+function initTouchDrag(box, handle) {
+  let startX, startY, startW, startH, moving = false, resizing = false;
+
+  box.addEventListener("touchstart", e => {
+    if (e.target === handle) {
+      resizing = true;
+    } else {
+      moving = true;
+    }
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    startW = box.offsetWidth;
+    startH = box.offsetHeight;
+    box.style.zIndex = 5;
+  }, { passive: false });
+
+  box.addEventListener("touchmove", e => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if (moving) {
+      box.style.left = box.offsetLeft + dx + "px";
+      box.style.top = box.offsetTop + dy + "px";
+    } else if (resizing) {
+      box.style.width = Math.max(30, startW + dx) + "px";
+      box.style.height = Math.max(30, startH + dy) + "px";
+    }
+    startX = touch.clientX;
+    startY = touch.clientY;
+  }, { passive: false });
+
+  box.addEventListener("touchend", e => {
+    moving = false;
+    resizing = false;
+    box.style.zIndex = 3;
+  });
+}
 </script>
 </body>
 </html>
