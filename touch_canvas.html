@@ -1,39 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</title>
+
 <style>
-#canvas_div {
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-top: 80px;
+  }
+
+  h1 {
+    color: #2a4d8f;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Tombol kembali */
+  #btnBack {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: 0.3s;
+  }
+
+  #btnBack:hover {
+    background: #3578d3;
+    transform: scale(1.05);
+  }
+
+  #canvas_div {
     text-align: center;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-canvas {
-  border: 2px solid black;
-}
-</style>
+  }
 
+  canvas {
+    border: 2px solid #2a4d8f;
+    border-radius: 12px;
+    background-color: white;
+  }
+
+  /* Kontrol bawah canvas */
+  .controls {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  button, select {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  button:hover, select:hover {
+    background-color: #f0f4fa;
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+</style>
+</head>
+<body>
+
+<!-- Tombol kembali -->
+<button id="btnBack" onclick="window.history.back()">&#8592;</button>
+
+<!-- Judul -->
+<h1>Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h1>
+
+<!-- Area Canvas -->
 <div id="canvas_div" style="overflow-x: auto;">
-<canvas id="canvas" width="900" height="360"></canvas>
-<button onclick="javascript:clearArea();return false;">Clear Area</button>
-Line width : <select id="selWidth">
-    <option value="11">11</option>
-    <option value="13" selected="selected">13</option>
-    <option value="15">15</option>
-</select>
-Color : <select id="selColor">
-    <option value="black">black</option>
-    <option value="blue" selected="selected">blue</option>
-    <option value="red">red</option>
-    <option value="green">green</option>
-    <option value="yellow">yellow</option>
-    <option value="gray">gray</option>
-</select>
+  <canvas id="canvas" width="900" height="360"></canvas>
+
+  <div class="controls">
+    <button onclick="javascript:clearArea();return false;">🧹 Clear Area</button>
+    Line width :
+    <select id="selWidth">
+      <option value="11">11</option>
+      <option value="13" selected="selected">13</option>
+      <option value="15">15</option>
+    </select>
+    Color :
+    <select id="selColor">
+      <option value="black">black</option>
+      <option value="blue" selected="selected">blue</option>
+      <option value="red">red</option>
+      <option value="green">green</option>
+      <option value="yellow">yellow</option>
+      <option value="gray">gray</option>
+    </select>
+  </div>
 </div>
 
 <script>
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-const viewport = window.visualViewport;
-var offsetX;
-var offsetY;
+var offsetX, offsetY;
+const ongoingTouches = [];
 
 function startup() {
   canvas.addEventListener('touchstart', handleStart);
@@ -41,17 +133,13 @@ function startup() {
   canvas.addEventListener('touchcancel', handleCancel);
   canvas.addEventListener('touchmove', handleMove);
 }
-
 document.addEventListener("DOMContentLoaded", startup);
-
-const ongoingTouches = [];
 
 function handleStart(evt) {
   evt.preventDefault();
   const touches = evt.changedTouches;
   offsetX = canvas.getBoundingClientRect().left;
   offsetY = canvas.getBoundingClientRect().top;
-  console.log(offsetX, offsetY)
   for (let i = 0; i < touches.length; i++) {
     ongoingTouches.push(copyTouch(touches[i]));
   }
@@ -72,7 +160,7 @@ function handleMove(evt) {
       context.lineJoin = "round";
       context.closePath();
       context.stroke();
-      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));
     }
   }
 }
@@ -81,12 +169,9 @@ function handleEnd(evt) {
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    let idx = ongoingTouchIndexById(touches[i].identifier);
+    const idx = ongoingTouchIndexById(touches[i].identifier);
     if (idx >= 0) {
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.fillStyle = color;
-      ongoingTouches.splice(idx, 1);  // remove it; we're done
+      ongoingTouches.splice(idx, 1);
     }
   }
 }
@@ -95,8 +180,8 @@ function handleCancel(evt) {
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1);  // remove it; we're done
+    const idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1);
   }
 }
 
@@ -106,16 +191,15 @@ function copyTouch({ identifier, clientX, clientY }) {
 
 function ongoingTouchIndexById(idToFind) {
   for (let i = 0; i < ongoingTouches.length; i++) {
-    const id = ongoingTouches[i].identifier;
-    if (id === idToFind) {
-      return i;
-    }
+    if (ongoingTouches[i].identifier === idToFind) return i;
   }
-  return -1;    // not found
+  return -1;
 }
 
 function clearArea() {
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 }
 </script>
+</body>
+</html>
