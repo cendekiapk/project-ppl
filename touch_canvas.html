@@ -12,50 +12,32 @@
     height: 100vh;
     margin: 0;
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
     flex-direction: column;
+    align-items: center;
     padding-top: 80px;
   }
 
   h1 {
     color: #2a4d8f;
     text-align: center;
-    margin-bottom: 40px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
 
-  /* Tombol kembali */
   #btnBack {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    background: #4a90e2;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    transition: 0.3s;
+    position: absolute;
+    top: 15px; left: 15px;
+    background: #4a90e2; color: white;
+    border: none; border-radius: 50%;
+    width: 48px; height: 48px;
+    font-size: 22px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    z-index: 999; transition: 0.3s;
   }
 
-  #btnBack:hover {
-    background: #3578d3;
-    transform: scale(1.05);
-  }
+  #btnBack:hover { background: #3578d3; transform: scale(1.05); }
 
   #canvas_div {
     text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   canvas {
@@ -64,9 +46,8 @@
     background-color: white;
   }
 
-  /* Kontrol bawah canvas */
   .controls {
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: center;
   }
 
@@ -80,39 +61,49 @@
     margin: 5px;
   }
 
-  button:hover, select:hover {
-    background-color: #f0f4fa;
+  .element-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    padding: 10px;
   }
 
-  button:active {
-    transform: scale(0.97);
+  .element-bar img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    cursor: grab;
+    transition: transform 0.2s;
+  }
+
+  .element-bar img:active {
+    transform: scale(1.1);
   }
 </style>
 </head>
 <body>
 
-<!-- Tombol kembali -->
 <button id="btnBack" onclick="window.history.back()">&#8592;</button>
 
-<!-- Judul -->
 <h1>Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h1>
 
-<!-- Area Canvas -->
-<div id="canvas_div" style="overflow-x: auto;">
+<div id="canvas_div">
   <canvas id="canvas" width="900" height="360"></canvas>
 
   <div class="controls">
-    <button onclick="javascript:clearArea();return false;">🧹 Clear Area</button>
+    <button onclick="clearArea()">🧹 Clear Area</button>
+    <button id="modeToggle">✏️ Mode: Gambar</button>
     Line width :
     <select id="selWidth">
       <option value="11">11</option>
-      <option value="13" selected="selected">13</option>
+      <option value="13" selected>13</option>
       <option value="15">15</option>
     </select>
     Color :
     <select id="selColor">
       <option value="black">black</option>
-      <option value="blue" selected="selected">blue</option>
+      <option value="blue" selected>blue</option>
       <option value="red">red</option>
       <option value="green">green</option>
       <option value="yellow">yellow</option>
@@ -121,67 +112,81 @@
   </div>
 </div>
 
+<!-- Elemen Titik A - E -->
+<div class="element-bar" id="elementBar">
+  <img src="assets/titikA.png" alt="Titik A" draggable="false">
+  <img src="assets/titikB.png" alt="Titik B" draggable="false">
+  <img src="assets/titikC.png" alt="Titik C" draggable="false">
+  <img src="assets/titikD.png" alt="Titik D" draggable="false">
+  <img src="assets/titikE.png" alt="Titik E" draggable="false">
+</div>
+
 <script>
 const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-var offsetX, offsetY;
-const ongoingTouches = [];
+const ctx = canvas.getContext('2d');
+let mode = 'draw'; // 'draw' atau 'select'
+let ongoingTouches = [];
+let offsetX, offsetY;
 
-function startup() {
-  canvas.addEventListener('touchstart', handleStart);
-  canvas.addEventListener('touchend', handleEnd);
-  canvas.addEventListener('touchcancel', handleCancel);
-  canvas.addEventListener('touchmove', handleMove);
-}
-document.addEventListener("DOMContentLoaded", startup);
+// Objek untuk menyimpan elemen yang ditempel di kanvas
+let placedElements = [];
+let activeElement = null;
+let scaleFactor = 1;
+
+// --- MODE PILIH ELEMEN / GAMBAR ---
+document.getElementById("modeToggle").addEventListener("click", () => {
+  if (mode === 'draw') {
+    mode = 'select';
+    document.getElementById("modeToggle").textContent = "🖐️ Mode: Pilih Elemen";
+  } else {
+    mode = 'draw';
+    document.getElementById("modeToggle").textContent = "✏️ Mode: Gambar";
+  }
+});
+
+// --- EVENT DRAW MODE ---
+canvas.addEventListener("touchstart", handleStart, false);
+canvas.addEventListener("touchmove", handleMove, false);
+canvas.addEventListener("touchend", handleEnd, false);
+canvas.addEventListener("touchcancel", handleEnd, false);
 
 function handleStart(evt) {
+  if (mode !== 'draw') return;
   evt.preventDefault();
   const touches = evt.changedTouches;
   offsetX = canvas.getBoundingClientRect().left;
   offsetY = canvas.getBoundingClientRect().top;
-  for (let i = 0; i < touches.length; i++) {
-    ongoingTouches.push(copyTouch(touches[i]));
-  }
+  for (let i = 0; i < touches.length; i++) ongoingTouches.push(copyTouch(touches[i]));
 }
 
 function handleMove(evt) {
+  if (mode !== 'draw') return;
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
     const color = document.getElementById('selColor').value;
     const idx = ongoingTouchIndexById(touches[i].identifier);
     if (idx >= 0) {
-      context.beginPath();
-      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
-      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.strokeStyle = color;
-      context.lineJoin = "round";
-      context.closePath();
-      context.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
+      ctx.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
+      ctx.lineWidth = document.getElementById('selWidth').value;
+      ctx.strokeStyle = color;
+      ctx.lineJoin = "round";
+      ctx.closePath();
+      ctx.stroke();
       ongoingTouches.splice(idx, 1, copyTouch(touches[i]));
     }
   }
 }
 
 function handleEnd(evt) {
+  if (mode !== 'draw') return;
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
     const idx = ongoingTouchIndexById(touches[i].identifier);
-    if (idx >= 0) {
-      ongoingTouches.splice(idx, 1);
-    }
-  }
-}
-
-function handleCancel(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1);
+    if (idx >= 0) ongoingTouches.splice(idx, 1);
   }
 }
 
@@ -197,8 +202,63 @@ function ongoingTouchIndexById(idToFind) {
 }
 
 function clearArea() {
-  context.setTransform(1, 0, 0, 1, 0, 0);
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  placedElements = [];
+  drawElements();
+}
+
+// --- MENANGANI ELEMEN TITIK A-E ---
+const elementBar = document.getElementById('elementBar');
+elementBar.querySelectorAll("img").forEach(img => {
+  img.addEventListener("touchstart", (e) => {
+    if (mode !== 'select') return;
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const newElem = {
+      img: img,
+      x: touch.clientX - canvas.getBoundingClientRect().left - 35,
+      y: touch.clientY - canvas.getBoundingClientRect().top - 35,
+      scale: 1
+    };
+    placedElements.push(newElem);
+    activeElement = newElem;
+    drawElements();
+  });
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  if (mode !== 'select') return;
+  e.preventDefault();
+  const touches = e.touches;
+  if (activeElement && touches.length === 1) {
+    activeElement.x = touches[0].clientX - canvas.getBoundingClientRect().left - 35;
+    activeElement.y = touches[0].clientY - canvas.getBoundingClientRect().top - 35;
+  }
+  if (activeElement && touches.length === 2) {
+    const dist = Math.hypot(
+      touches[0].clientX - touches[1].clientX,
+      touches[0].clientY - touches[1].clientY
+    );
+    if (!activeElement.lastDist) activeElement.lastDist = dist;
+    let scaleChange = dist / activeElement.lastDist;
+    activeElement.scale *= scaleChange;
+    activeElement.lastDist = dist;
+  }
+  drawElements();
+});
+
+canvas.addEventListener("touchend", (e) => {
+  if (activeElement) activeElement.lastDist = null;
+});
+
+function drawElements() {
+  clearArea();
+  placedElements.forEach(el => {
+    const w = 70 * el.scale;
+    const h = 70 * el.scale;
+    ctx.drawImage(el.img, el.x, el.y, w, h);
+  });
 }
 </script>
 </body>
