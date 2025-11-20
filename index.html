@@ -11,12 +11,62 @@
       padding: 0;
       height: 100vh;
       display: flex;
-      align-items: center; /* Vertikal tengah */
-      justify-content: center; /* Horizontal tengah */
+      align-items: center;
+      justify-content: center;
       background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
     }
 
+    /* HEADER */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 20px;
+      background: #ffffffcc;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      height: 48px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+    }
+
+    .back-btn {
+      background: #2a4d8f;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .back-btn:hover {
+      background: #1e3a6e;
+    }
+
+    /* DASHBOARD */
     .dashboard {
+      margin-top: 160px; /* agar tidak tertutup header */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -79,10 +129,30 @@
         width: 48px;
         height: 48px;
       }
+
+      .header-logo {
+        height: 40px;
+      }
+
+      .header-title {
+        font-size: 17px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
+  <header class="top-header">
+    <div class="header-row">
+      <img src="assets/Logo_SMK.png" class="header-logo" alt="Logo SMK">
+      <span class="header-title">SMK Cendekia Batujajar</span>
+    </div>
+
+    <button class="back-btn" onclick="history.back()">⬅ Kembali</button>
+  </header>
+
+  <!-- DASHBOARD -->
   <div class="dashboard">
     <h1>🎓 Dashboard Pembelajaran Perbaikan Peralatan Listrik</h1>
 
@@ -108,5 +178,6 @@
       </a>
     </div>
   </div>
+
 </body>
 </html>
