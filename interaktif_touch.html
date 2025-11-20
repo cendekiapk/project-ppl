@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Media Interaktif - Setrika (Touch Only)</title>
+
 <style>
   body {
     font-family: "Poppins", sans-serif;
@@ -13,16 +14,30 @@
     min-height: 100vh;
   }
 
+  /* === TOMBOL BACK (disamakan dengan halaman lain) === */
   #btnBack {
-    position: absolute; top: 15px; left: 15px;
-    background: #4a90e2; color: white;
-    border: none; border-radius: 50%;
-    width: 48px; height: 48px;
-    font-size: 22px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    z-index: 999; transition: 0.3s;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: 0.3s;
   }
-  #btnBack:hover { background: #3578d3; transform: scale(1.05); }
+  #btnBack:hover {
+    background: #3578d3;
+    transform: scale(1.05);
+  }
 
   h2 { text-align: center; margin-top: 70px; color: #2a4d8f; }
 
@@ -99,6 +114,7 @@
   }
 </style>
 </head>
+
 <body>
 <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
 
@@ -109,24 +125,27 @@
   <button id="modeDrag">🖐️ Mode Elemen</button>
   <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
   <button id="clearCanvas">🧹 Hapus Gambar</button>
+
   <div style="
-  text-align: center;
-  background: #e3f2fd;
-  color: #2a4d8f;
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  margin-top: 10px;
-  width: fit-content;
-">
-  💡 Tekan lama elemen di kanvas untuk menghapusnya.
-</div>
+    text-align: center;
+    background: #e3f2fd;
+    color: #2a4d8f;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    width: fit-content;
+  ">
+    💡 Tekan lama elemen di kanvas untuk menghapusnya.
+  </div>
+
   <select id="selWidth">
     <option value="6">6</option>
     <option value="9" selected>9</option>
     <option value="12">12</option>
     <option value="15">15</option>
   </select>
+
   <select id="selColor">
     <option value="black">Hitam</option>
     <option value="blue" selected>Biru</option>
@@ -159,6 +178,8 @@
 </div>
 
 <script>
+/* —————————————— DRAWING + DRAG CODE (tidak diubah) —————————————— */
+
 const drawCanvas = document.getElementById("drawCanvas");
 const ctx = drawCanvas.getContext("2d");
 const canvasArea = document.getElementById("canvasArea");
@@ -199,7 +220,7 @@ btnClear.addEventListener("click", () => {
   ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
 });
 
-// --- DRAWING (from your working version) ---
+// DRAWING AREA
 function startup() {
   drawCanvas.addEventListener('touchstart', handleStart, { passive: false });
   drawCanvas.addEventListener('touchend', handleEnd, { passive: false });
@@ -214,65 +235,57 @@ function handleStart(evt) {
   const touches = evt.changedTouches;
   offsetX = drawCanvas.getBoundingClientRect().left;
   offsetY = drawCanvas.getBoundingClientRect().top;
-  for (let i = 0; i < touches.length; i++) {
-    ongoingTouches.push(copyTouch(touches[i]));
-  }
+  for (let t of touches) ongoingTouches.push(copyTouch(t));
 }
-
 function handleMove(evt) {
   if (mode !== "draw") return;
   evt.preventDefault();
   const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    const idx = ongoingTouchIndexById(touches[i].identifier);
+  for (let t of touches) {
+    const idx = ongoingTouchIndexById(t.identifier);
+    const color = selColor.value;
     if (idx >= 0) {
       ctx.beginPath();
       ctx.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
-      ctx.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
-      ctx.lineWidth = document.getElementById('selWidth').value;
+      ctx.lineTo(t.clientX - offsetX, t.clientY - offsetY);
+      ctx.lineWidth = selWidth.value;
       ctx.strokeStyle = color;
       ctx.lineJoin = "round";
-      ctx.closePath();
       ctx.stroke();
-      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));
+      ongoingTouches[idx] = copyTouch(t);
     }
   }
 }
-
 function handleEnd(evt) {
   if (mode !== "draw") return;
   evt.preventDefault();
   const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    let idx = ongoingTouchIndexById(touches[i].identifier);
+  for (let t of touches) {
+    const idx = ongoingTouchIndexById(t.identifier);
     if (idx >= 0) ongoingTouches.splice(idx, 1);
   }
 }
 function handleCancel(evt) {
   evt.preventDefault();
   const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1);
+  for (let t of touches) {
+    const idx = ongoingTouchIndexById(t.identifier);
+    if (idx >= 0) ongoingTouches.splice(idx, 1);
   }
 }
 function copyTouch({ identifier, clientX, clientY }) {
   return { identifier, clientX, clientY };
 }
-function ongoingTouchIndexById(idToFind) {
-  for (let i = 0; i < ongoingTouches.length; i++) {
-    const id = ongoingTouches[i].identifier;
-    if (id === idToFind) return i;
-  }
-  return -1;
+function ongoingTouchIndexById(id) {
+  return ongoingTouches.findIndex(t => t.identifier === id);
 }
 
-// --- DRAG & PINCH for elements ---
+// DRAG + PINCH GESTURE
 document.querySelectorAll(".elemen").forEach(el => {
   el.addEventListener("touchstart", e => {
     if (mode !== "drag") return;
     e.preventDefault();
+
     const imgSrc = el.querySelector("img").src;
     const newEl = document.createElement("div");
     newEl.className = "resizable";
@@ -284,6 +297,7 @@ document.querySelectorAll(".elemen").forEach(el => {
     const img = document.createElement("img");
     img.src = imgSrc;
     newEl.appendChild(img);
+
     elementsLayer.appendChild(newEl);
     initTouchDragZoom(newEl);
   });
@@ -312,6 +326,7 @@ function initTouchDragZoom(el) {
   el.addEventListener("touchmove", e => {
     e.preventDefault();
     clearTimeout(longPressTimer);
+
     if (e.touches.length === 1 && moving) {
       const dx = e.touches[0].clientX - startX;
       const dy = e.touches[0].clientY - startY;
@@ -319,6 +334,7 @@ function initTouchDragZoom(el) {
       el.style.top = el.offsetTop + dy + "px";
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+
     } else if (e.touches.length === 2) {
       const newDist = getDistance(e.touches);
       const scale = newDist / lastDist;
@@ -328,16 +344,16 @@ function initTouchDragZoom(el) {
     }
   }, { passive: false });
 
-  el.addEventListener("touchend", e => {
+  el.addEventListener("touchend", () => {
     moving = false;
     lastDist = null;
     clearTimeout(longPressTimer);
   });
 }
 
-function getDistance(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
+function getDistance(t) {
+  const dx = t[0].clientX - t[1].clientX;
+  const dy = t[0].clientY - t[1].clientY;
   return Math.sqrt(dx * dx + dy * dy);
 }
 </script>
