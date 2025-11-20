@@ -5,25 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Media Interaktif - Perbaikan Setrika</title>
   <link rel="stylesheet" href="style.css" />
+
   <style>
-    /* Tombol kembali ke menu utama */
-    #btnBack {
+    /* === LOGO + NAMA SMK === */
+    .logo-wrapper {
       position: absolute;
-      top: 15px;
-      left: 15px;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-row img {
+      height: 55px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+    }
+
+    /* === BUTTON BACK DI BAWAH LOGO === */
+    #btnBack {
       background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 15px;
       cursor: pointer;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-      z-index: 999;
       transition: 0.3s;
     }
 
@@ -35,14 +56,38 @@
     #btnBack i {
       pointer-events: none;
     }
+
+    /* Tambah sedikit margin top agar konten tidak tertutup logo */
+    body {
+      padding-top: 120px;
+    }
+
+    @media (max-width: 600px) {
+      .logo-row img {
+        height: 45px;
+      }
+      .logo-text {
+        font-size: 17px;
+      }
+    }
   </style>
 </head>
-<body>
-  <!-- Tombol kembali -->
-  <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
-    ⬅️
-  </button>
 
+<body>
+
+  <!-- LOGO + NAMA + BACK -->
+  <div class="logo-wrapper">
+    <div class="logo-row">
+      <img src="assets/Logo_SMK.png" alt="Logo SMK">
+      <span class="logo-text">SMK Cendekia Batujajar</span>
+    </div>
+
+    <button id="btnBack" onclick="window.location.href='index.html'">
+      ⬅ Kembali
+    </button>
+  </div>
+
+  <!-- JUDUL -->
   <h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik</h2>
 
   <div id="controls">
@@ -79,4 +124,3 @@
   <script src="script_mouse.js"></script>
 </body>
 </html>
-
