@@ -14,7 +14,52 @@
       align-items: center;
       justify-content: flex-start;
       flex-direction: column;
-      padding-top: 80px; /* beri jarak untuk tombol floating */
+      padding-top: 160px; /* space agar logo + back tidak tabrakan dengan judul */
+    }
+
+    /* === LOGO + NAMA SMK === */
+    .logo-wrapper {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-row img {
+      height: 55px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+    }
+
+    /* === BUTTON BACK DI BAWAH LOGO === */
+    #btnBack {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+    }
+
+    #btnBack:hover {
+      background: #3578d3;
+      transform: scale(1.05);
     }
 
     h1 {
@@ -22,32 +67,6 @@
       text-align: center;
       margin-bottom: 40px;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-     /* Tombol kembali */
-    #btnBack {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      background: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-      z-index: 999;
-      transition: 0.3s;
-    }
-
-    #btnBack:hover {
-      background: #3578d3;
-      transform: scale(1.05);
     }
 
     .mode-container {
@@ -94,18 +113,33 @@
         width: 64px;
         height: 64px;
       }
+      .logo-row img {
+        height: 45px;
+      }
+      .logo-text {
+        font-size: 17px;
+      }
     }
-    
   </style>
 </head>
 <body>
-  <!-- Tombol kembali ke dashboard -->
-  <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
-    ⬅️
-  </button>
 
+  <!-- LOGO + TULISAN SMK + BACK (di luar header) -->
+  <div class="logo-wrapper">
+    <div class="logo-row">
+      <img src="assets/Logo_SMK.png" alt="Logo SMK">
+      <span class="logo-text">SMK Cendekia Batujajar</span>
+    </div>
+
+    <button id="btnBack" onclick="window.location.href='index.html'">
+      ⬅ Kembali
+    </button>
+  </div>
+
+  <!-- JUDUL HALAMAN -->
   <h1>Pilih Mode Media Interaktif</h1>
 
+  <!-- PILIHAN MODE -->
   <div class="mode-container">
     <a href="interaktif_mouse.html" class="mode">
       <img src="assets/icon-mouse.png" alt="Mouse" />
@@ -117,6 +151,6 @@
       Gunakan Touchscreen
     </a>
   </div>
+
 </body>
 </html>
-
