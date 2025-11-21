@@ -17,7 +17,7 @@
       min-height: 100vh;
     }
 
-    /* === TOMBOL BACK (sama seperti index.html) === */
+    /* === TOMBOL BACK (sama persis index.html) === */
     #btnBack {
       position: absolute;
       top: 15px;
@@ -42,25 +42,36 @@
       transform: scale(1.05);
     }
 
-    /* === LOGO + TEKS (mirip halaman index utama) === */
-    .logo-wrapper {
+    /* === HEADER SMK (SAMA PERSIS INDEX.HTML) === */
+    .header-smk {
       margin-top: 80px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 12px;
     }
 
-    .logo-wrapper img {
-      width: 90px;
-      height: 90px;
+    .header-smk img {
+      width: 70px;
+      height: 70px;
     }
 
-    .logo-text {
-      font-size: 20px;
+    .header-smk .text-wrap {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .header-smk .text-wrap .big {
+      font-size: 22px;
       font-weight: 700;
       color: #2a4d8f;
-      text-align: center;
+    }
+
+    .header-smk .text-wrap .small {
+      font-size: 14px;
+      color: #444;
+      margin-top: -4px;
     }
 
     h1 {
@@ -100,35 +111,21 @@
       margin-top: -10px;
       color: #333;
     }
-
-    @media (max-width: 600px) {
-      .logo-wrapper img {
-        width: 65px;
-        height: 65px;
-      }
-
-      #btnBack {
-        width: 42px;
-        height: 42px;
-        font-size: 18px;
-      }
-
-      .logo-text {
-        font-size: 17px;
-      }
-    }
   </style>
 </head>
 
 <body>
 
-  <!-- TOMBOL KEMBALI (SAMA DENGAN INDEX) -->
+  <!-- TOMBOL BACK PERSIS SEPERTI INDEX -->
   <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
 
-  <!-- LOGO + TEKS -->
-  <div class="logo-wrapper">
-    <img src="assets/Logo_SMK.png" alt="Logo SMK">
-    <div class="logo-text">SMK Cendekia Batujajar</div>
+  <!-- HEADER SMK PERSIS SEPERTI INDEX.HTML -->
+  <div class="header-smk">
+    <img src="assets/Logo_SMK.png" alt="Logo SMK" />
+    <div class="text-wrap">
+      <span class="big">SMK Cendekia Batujajar</span>
+      <span class="small">Pusat Keunggulan</span>
+    </div>
   </div>
 
   <h1>📖 Materi Pembelajaran</h1>
