@@ -17,7 +17,35 @@
       min-height: 100vh;
     }
 
-    /* Tombol kembali */
+    /* =======================
+       LOGO + NAMA SMK
+    ======================= */
+    .header-school {
+      position: fixed;
+      top: 15px;
+      left: 75px;
+      display: flex;
+      align-items: center;
+      z-index: 999;
+      gap: 10px;
+    }
+
+    .header-school img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .header-school span {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2a4d8f;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* =======================
+       TOMBOL KEMBALI
+    ======================= */
     #btnBack {
       position: fixed;
       top: 15px;
@@ -34,7 +62,7 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-      z-index: 999;
+      z-index: 1000;
       transition: 0.3s;
     }
 
@@ -43,13 +71,19 @@
       transform: scale(1.05);
     }
 
+    /* =======================
+       JUDUL
+    ======================= */
     h1 {
-      margin-top: 80px;
+      margin-top: 100px;
       color: #2a4d8f;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
+    /* =======================
+       VIDEO LIST
+    ======================= */
     .video-container {
       width: 90%;
       max-width: 900px;
@@ -90,18 +124,33 @@
       p {
         font-size: 14px;
       }
+      .header-school span {
+        font-size: 15px;
+      }
+      .header-school img {
+        width: 36px;
+        height: 36px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Tombol kembali ke dashboard -->
+
+  <!-- Tombol kembali -->
   <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
     ⬅️
   </button>
 
+  <!-- Logo + nama SMK -->
+  <div class="header-school">
+    <img src="assets/Logo_SMK.png" alt="Logo SMK">
+    <span>SMK PUSAT KEUNGGULAN</span>
+  </div>
+
   <h1>🎥 Video Pembelajaran</h1>
 
   <div class="video-container">
+
     <!-- Video 1 -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/ASBNa7b-7MQ"
@@ -114,7 +163,7 @@
     <!-- Video 2 -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/aON_if40J_8"
-              title="Cara Kerja Setrika - Langsung Bisa Memperbaiki Sendiri"
+              title="Cara Kerja Setrika"
               allowfullscreen>
       </iframe>
     </div>
@@ -123,11 +172,13 @@
     <!-- Video 3 -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/SJ739--Vc3A"
-              title="60 Detik Pesona Ilmu - Mengapa setrika otomatis bisa mempertahankan suhu yang diinginkan?"
+              title="Mengapa setrika otomatis bisa mempertahankan suhu?"
               allowfullscreen>
       </iframe>
     </div>
-    <p><strong>Video 3:</strong> 60 Detik Pesona Ilmu - Mengapa setrika otomatis bisa mempertahankan suhu yang diinginkan?</p>
+    <p><strong>Video 3:</strong> Mengapa setrika otomatis bisa mempertahankan suhu?</p>
+
   </div>
+
 </body>
 </html>
