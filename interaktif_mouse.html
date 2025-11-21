@@ -13,7 +13,7 @@
     .logo-wrapper {
       position: fixed;
       top: 15px;
-      left: 75px; /* memberi ruang untuk tombol kembali bulat */
+      left: 75px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -32,7 +32,7 @@
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* === Tombol kembali (versi bulat, sama seperti contoh) === */
+    /* === Tombol kembali === */
     #btnBack {
       position: fixed;
       top: 15px;
@@ -58,18 +58,51 @@
       transform: scale(1.05);
     }
 
+    /* === TEXT BOX PANDUAN === */
+    #panduanBox {
+      width: 280px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      font-family: "Poppins", sans-serif;
+      position: fixed;
+      right: 20px;
+      top: 120px;
+      z-index: 800;
+      border-left: 5px solid #4a90e2;
+    }
+
+    #panduanBox h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #2a4d8f;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #panduanBox ul {
+      margin-top: 8px;
+      padding-left: 18px;
+    }
+
+    #panduanBox li {
+      font-size: 14px;
+      line-height: 1.45;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
     /* Responsif */
-    @media (max-width: 600px) {
-      .logo-wrapper img {
-        height: 40px;
-      }
-      .logo-title {
-        font-size: 17px;
-      }
-      #btnBack {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
+    @media (max-width: 900px) {
+      #panduanBox {
+        position: relative;
+        width: calc(100% - 40px);
+        right: 0;
+        top: 0;
+        margin: 10px auto;
       }
     }
   </style>
@@ -87,8 +120,29 @@
     <div class="logo-title">SMK CENDEKIA BATUJAJAR</div>
   </div>
 
-  <!-- === KONTEN UTAMA (tidak diubah) === -->
+  <!-- === TEXT BOX PANDUAN === -->
+  <div id="panduanBox">
+    <h3>📘 Cara Menggunakan</h3>
+    <ul>
+      <li><b>Masukkan Elemen</b><br>
+          Aktifkan Mode Elemen dan pilih elemen yang ingin dipasang.</li>
 
+      <li><b>Atur & Hapus Elemen</b><br>
+          Seret elemen, ubah ukurannya, atau hapus dengan tombol hapus atau tekan lama.</li>
+
+      <li><b>Gambar Jalur Rangkaian</b><br>
+          Aktifkan Mode Gambar dan hubungkan titik-titik elemen.  
+          Sesuaikan warna dan ketebalan garis.</li>
+
+      <li><b>Hapus Garis</b><br>
+          Gunakan tombol Hapus Elemen & Gambar jika salah.</li>
+
+      <li><b>Tampilkan Kunci Jawaban</b><br>
+          Bandingkan hasil rangkaian dengan jawaban yang benar.</li>
+    </ul>
+  </div>
+
+  <!-- === KONTEN UTAMA === -->
   <h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik</h2>
 
   <div id="controls">
@@ -126,5 +180,3 @@
 
 </body>
 </html>
-
-
