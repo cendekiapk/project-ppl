@@ -5,44 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modul Pembelajaran</title>
   <style>
-    /* === LOGO + NAMA SMK === */
-    .logo-wrapper {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
+      margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      z-index: 999;
-    }
-
-    .logo-row {
-      display: flex;
       align-items: center;
-      gap: 12px;
+      min-height: 100vh;
     }
 
-    .logo-row img {
-      height: 55px;
-    }
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-      color: #2a4d8f;
-    }
-
-    /* === BUTTON BACK DI BAWAH LOGO === */
+    /* === TOMBOL KEMBALI === */
     #btnBack {
+      position: fixed;
+      top: 15px;
+      left: 15px;
       background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 15px;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
       transition: 0.3s;
     }
 
@@ -51,42 +42,121 @@
       transform: scale(1.05);
     }
 
-    #btnBack i {
-      pointer-events: none;
+    /* === LOGO + NAMA SMK === */
+    .logo-wrapper {
+      position: fixed;
+      top: 15px;
+      left: 75px; /* memberi ruang tombol kembali */
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 999;
     }
 
-    /* Tambah sedikit margin top agar konten tidak tertutup logo */
-    body {
-      padding-top: 120px;
+    .logo-wrapper img {
+      height: 48px;
+    }
+
+    .logo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* === JUDUL HALAMAN === */
+    h1 {
+      margin-top: 100px;
+      color: #2a4d8f;
+      text-align: center;
+    }
+
+    /* === PDF Viewer === */
+    .pdf-container {
+      width: 90%;
+      max-width: 900px;
+      height: 600px;
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .pdf-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .pdf-buttons button {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+
+    .pdf-buttons button:hover {
+      background: #3578d3;
+      transform: translateY(-2px);
     }
 
     @media (max-width: 600px) {
-      .logo-row img {
-        height: 45px;
+      .pdf-container {
+        height: 80vh;
       }
-      .logo-text {
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .logo-wrapper img {
+        height: 40px;
+      }
+
+      .logo-title {
         font-size: 17px;
+      }
+
+      #btnBack {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- LOGO + NAMA + BACK -->
-  <div class="logo-wrapper">
-    <div class="logo-row">
-      <img src="assets/Logo_SMK.png" alt="Logo SMK">
-      <span class="logo-text">SMK Cendekia Batujajar</span>
-    </div>
+  <!-- TOMBOL KEMBALI -->
+  <button id="btnBack" onclick="window.location.href='index.html'">
+    ⬅️
+  </button>
 
-    <button id="btnBack" onclick="window.location.href='index.html'">
-      ⬅ Kembali
-    </button>
+  <!-- LOGO + NAMA SMK -->
+  <div class="logo-wrapper">
+    <img src="assets/Logo_SMK.png" alt="Logo SMK">
+    <div class="logo-title">SMK Cendekia Batujajar</div>
   </div>
-  
+
   <h1>📘 Modul Pembelajaran</h1>
 
+  <!-- PDF VIEWER -->
   <div class="pdf-container" id="pdf-container">
     <p>Memuat PDF...</p>
   </div>
@@ -96,13 +166,13 @@
     <button onclick="openPDFTab()">🌐 Buka di Tab Baru</button>
   </div>
 
-  <!-- PDF.js library -->
+  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
   <script>
     const url = 'assets/RPP_SetriksListrik.pdf';
     const container = document.getElementById('pdf-container');
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js';
 
     let currentPage = 1;
@@ -126,18 +196,23 @@
         canvas.width = scaledViewport.width;
         canvas.height = scaledViewport.height;
 
-        page.render({ canvasContext: context, viewport: scaledViewport });
+        page.render({
+          canvasContext: context,
+          viewport: scaledViewport
+        });
       });
     }
 
-    pdfjsLib.getDocument(url).promise.then(pdf => {
-      pdfDoc = pdf;
-      renderPage(currentPage);
-    }).catch(err => {
-      container.innerHTML = 
-        `<p>PDF gagal dimuat. Silakan <a href="${url}" target="_blank">klik di sini</a>.</p>`;
-      console.error(err);
-    });
+    pdfjsLib
+      .getDocument(url)
+      .promise.then(pdf => {
+        pdfDoc = pdf;
+        renderPage(currentPage);
+      })
+      .catch(err => {
+        container.innerHTML = `<p>PDF gagal dimuat. Silakan <a href="${url}" target="_blank">klik di sini</a> untuk unduh.</p>`;
+        console.error(err);
+      });
 
     function downloadPDF() {
       window.open(url, '_blank');
@@ -147,8 +222,5 @@
       window.open(url, '_blank');
     }
   </script>
-
 </body>
 </html>
-
-
