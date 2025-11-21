@@ -29,7 +29,7 @@
       font-size: 20px;
       font-weight: 700;
       color: #2a4d8f;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     }
 
     /* === Tombol kembali === */
@@ -48,7 +48,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
       z-index: 1000;
       transition: 0.3s;
     }
@@ -58,53 +58,90 @@
       transform: scale(1.05);
     }
 
-    /* === TEXT BOX PANDUAN === */
-    #panduanBox {
-      width: 280px;
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 18px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    /* === Tombol Tutorial === */
+    #btnTutorial {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
       font-family: "Poppins", sans-serif;
-      position: fixed;
-      right: 20px;
-      top: 120px;
-      z-index: 800;
-      border-left: 5px solid #4a90e2;
+      margin-left: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    #panduanBox h3 {
-      margin: 0 0 10px 0;
+    #btnTutorial:hover {
+      background: #3578d3;
+    }
+
+    /* === OVERLAY === */
+    #sheetOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(1px);
+      display: none;
+      z-index: 998;
+    }
+
+    /* === BOTTOM SHEET === */
+    #tutorialSheet {
+      position: fixed;
+      bottom: -420px;
+      left: 0;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 18px 18px 0 0;
+      padding: 20px 22px 30px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.25);
+      z-index: 999;
+      font-family: "Poppins", sans-serif;
+      transition: bottom 0.35s ease;
+    }
+
+    #sheetHandle {
+      width: 42px;
+      height: 5px;
+      background: #d0d0d0;
+      border-radius: 10px;
+      margin: 0 auto 12px auto;
+    }
+
+    #tutorialSheet h3 {
+      margin-top: 0;
+      color: #2a4d8f;
+      margin-bottom: 10px;
       font-size: 18px;
       font-weight: 700;
-      color: #2a4d8f;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    #panduanBox ul {
-      margin-top: 8px;
-      padding-left: 18px;
+    #tutorialSheet ul {
+      padding-left: 20px;
     }
 
-    #panduanBox li {
+    #tutorialSheet li {
       font-size: 14px;
+      margin-bottom: 8px;
       line-height: 1.45;
-      color: #333;
-      margin-bottom: 6px;
     }
 
-    /* Responsif */
-    @media (max-width: 900px) {
-      #panduanBox {
-        position: relative;
-        width: calc(100% - 40px);
-        right: 0;
-        top: 0;
-        margin: 10px auto;
-      }
+    #closeSheet {
+      margin-top: 12px;
+      width: 100%;
+      background: #4a90e2;
+      color: white;
+      padding: 10px;
+      border: none;
+      font-size: 15px;
+      border-radius: 10px;
+      cursor: pointer;
     }
+
+    #closeSheet:hover {
+      background: #3578d3;
+    }
+
   </style>
 
 </head>
@@ -120,29 +157,6 @@
     <div class="logo-title">SMK CENDEKIA BATUJAJAR</div>
   </div>
 
-  <!-- === TEXT BOX PANDUAN === -->
-  <div id="panduanBox">
-    <h3>📘 Cara Menggunakan</h3>
-    <ul>
-      <li><b>Masukkan Elemen</b><br>
-          Aktifkan Mode Elemen dan pilih elemen yang ingin dipasang.</li>
-
-      <li><b>Atur & Hapus Elemen</b><br>
-          Seret elemen, ubah ukurannya, atau hapus dengan tombol hapus atau tekan lama.</li>
-
-      <li><b>Gambar Jalur Rangkaian</b><br>
-          Aktifkan Mode Gambar dan hubungkan titik-titik elemen.  
-          Sesuaikan warna dan ketebalan garis.</li>
-
-      <li><b>Hapus Garis</b><br>
-          Gunakan tombol Hapus Elemen & Gambar jika salah.</li>
-
-      <li><b>Tampilkan Kunci Jawaban</b><br>
-          Bandingkan hasil rangkaian dengan jawaban yang benar.</li>
-    </ul>
-  </div>
-
-  <!-- === KONTEN UTAMA === -->
   <h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik</h2>
 
   <div id="controls">
@@ -150,6 +164,9 @@
     <button id="modeClick">🖱️ Mode Klik</button>
     <button id="undo">↩️ Undo</button>
     <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
+
+    <!-- === TOMBOL TUTORIAL BARU === -->
+    <button id="btnTutorial">📘 Tutorial</button>
   </div>
 
   <div id="canvasWrapper">
@@ -176,7 +193,59 @@
     </div>
   </div>
 
+  <!-- === ANDROID BOTTOM SHEET === -->
+  <div id="tutorialSheet">
+    <div id="sheetHandle"></div>
+
+    <h3>📘 Cara Menggunakan Media Interaktif</h3>
+
+    <ul>
+      <li><b>1. Masukkan Elemen ke Kanvas</b><br>
+      Aktifkan Mode Klik, lalu pilih elemen yang diperlukan.</li>
+
+      <li><b>2. Atur & Hapus Elemen</b><br>
+      Geser atau ubah ukuran elemen.  
+      Hapus dengan tombol undo.</li>
+
+      <li><b>3. Gambar Jalur Rangkaian</b><br>
+      Beralih ke Mode Gambar, lalu hubungkan titik-titik elemen.</li>
+
+      <li><b>4. Hapus Garis Jika Perlu</b><br>
+      Gunakan tombol undo.</li>
+
+      <li><b>4. Cek Hasil dengan Kunci Jawaban</b><br>
+      Tekan Tampilkan Kunci Jawaban untuk melihat jawaban benar.</li>
+    </ul>
+
+    <button id="closeSheet">Tutup</button>
+  </div>
+
+  <div id="sheetOverlay"></div>
+
   <script src="script_mouse.js"></script>
+
+  <!-- === SCRIPT BOTTOM SHEET === -->
+  <script>
+    const sheet = document.getElementById("tutorialSheet");
+    const overlay = document.getElementById("sheetOverlay");
+    const btnOpen = document.getElementById("btnTutorial");
+    const btnClose = document.getElementById("closeSheet");
+
+    btnOpen.onclick = () => {
+      sheet.style.bottom = "0";
+      overlay.style.display = "block";
+    };
+
+    btnClose.onclick = () => {
+      sheet.style.bottom = "-420px";
+      overlay.style.display = "none";
+    };
+
+    overlay.onclick = () => {
+      sheet.style.bottom = "-420px";
+      overlay.style.display = "none";
+    };
+  </script>
 
 </body>
 </html>
