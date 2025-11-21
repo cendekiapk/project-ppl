@@ -6,126 +6,84 @@
   <title>Materi Pembelajaran</title>
 
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
-      margin: 0;
-      padding: 0;
+    /* === LOGO + NAMA SMK === */
+    .logo-wrapper {
+      position: absolute;
+      top: 20px;
+      left: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      align-items: flex-start;
+      gap: 10px;
+      z-index: 999;
     }
 
-    /* === TOMBOL BACK (sama persis index.html) === */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-row img {
+      height: 55px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+    }
+
+    /* === BUTTON BACK DI BAWAH LOGO === */
     #btnBack {
-      position: absolute;
-      top: 15px;
-      left: 15px;
       background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-      z-index: 999;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
       transition: 0.3s;
     }
+
     #btnBack:hover {
       background: #3578d3;
       transform: scale(1.05);
     }
 
-    /* === HEADER SMK (SAMA PERSIS INDEX.HTML) === */
-    .header-smk {
-      margin-top: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+    #btnBack i {
+      pointer-events: none;
     }
 
-    .header-smk img {
-      width: 70px;
-      height: 70px;
+    /* Tambah sedikit margin top agar konten tidak tertutup logo */
+    body {
+      padding-top: 120px;
     }
 
-    .header-smk .text-wrap {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-    }
-
-    .header-smk .text-wrap .big {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2a4d8f;
-    }
-
-    .header-smk .text-wrap .small {
-      font-size: 14px;
-      color: #444;
-      margin-top: -4px;
-    }
-
-    h1 {
-      margin-top: 20px;
-      text-align: center;
-      color: #2a4d8f;
-    }
-
-    .slide-container {
-      width: 90%;
-      max-width: 900px;
-      margin: 30px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 40px;
-    }
-
-    .slide-box {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      background: black;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    p {
-      text-align: center;
-      font-size: 16px;
-      margin-top: -10px;
-      color: #333;
+    @media (max-width: 600px) {
+      .logo-row img {
+        height: 45px;
+      }
+      .logo-text {
+        font-size: 17px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- TOMBOL BACK PERSIS SEPERTI INDEX -->
-  <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
-
-  <!-- HEADER SMK PERSIS SEPERTI INDEX.HTML -->
-  <div class="header-smk">
-    <img src="assets/Logo_SMK.png" alt="Logo SMK" />
-    <div class="text-wrap">
-      <span class="big">SMK Cendekia Batujajar</span>
-      <span class="small">Pusat Keunggulan</span>
+  <!-- LOGO + NAMA + BACK -->
+  <div class="logo-wrapper">
+    <div class="logo-row">
+      <img src="assets/Logo_SMK.png" alt="Logo SMK">
+      <span class="logo-text">SMK Cendekia Batujajar</span>
     </div>
+
+    <button id="btnBack" onclick="window.location.href='index.html'">
+      ⬅ Kembali
+    </button>
   </div>
 
   <h1>📖 Materi Pembelajaran</h1>
@@ -144,3 +102,4 @@
 
 </body>
 </html>
+
