@@ -3,26 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pilih Mode Interaktif</title>
+  <title>Media Interaktif - Perbaikan Setrika</title>
 
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- === LOGO + NAMA SMK + TOMBOL KEMBALI === -->
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      flex-direction: column;
-      padding-top: 180px; /* agar judul tidak tertutup logo */
-    }
-
-    /* === LOGO + NAMA SMK + TOMBOL KEMBALI === */
+    /* === Wrapper Logo === */
     .logo-wrapper {
       position: fixed;
       top: 15px;
-      left: 75px; /* ruang untuk tombol kembali bundar */
+      left: 75px; /* memberi ruang untuk tombol kembali bulat */
       display: flex;
       align-items: center;
       gap: 12px;
@@ -34,13 +25,14 @@
     }
 
     .logo-title {
+      font-family: "Poppins", sans-serif;
       font-size: 20px;
       font-weight: 700;
       color: #2a4d8f;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* === TOMBOL BACK BULAT === */
+    /* === Tombol kembali (versi bulat, sama seperti contoh) === */
     #btnBack {
       position: fixed;
       top: 15px;
@@ -66,104 +58,71 @@
       transform: scale(1.05);
     }
 
-    /* JUDUL */
-    h1 {
-      color: #2a4d8f;
-      text-align: center;
-      margin-bottom: 40px;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    /* PILIHAN MODE */
-    .mode-container {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .mode {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      width: 200px;
-      height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: #2a4d8f;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    .mode:hover {
-      background: #4a90e2;
-      color: white;
-      transform: scale(1.05);
-    }
-
-    .mode img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 15px;
-    }
-
+    /* Responsif */
     @media (max-width: 600px) {
       .logo-wrapper img {
         height: 40px;
       }
-
       .logo-title {
         font-size: 17px;
       }
-
       #btnBack {
         width: 42px;
         height: 42px;
         font-size: 20px;
       }
-
-      .mode {
-        width: 160px;
-        height: 160px;
-      }
-      .mode img {
-        width: 64px;
-        height: 64px;
-      }
     }
   </style>
-</head>
 
+</head>
 <body>
 
-  <!-- === TOMBOL BACK BULAT === -->
-  <button id="btnBack" title="Kembali" onclick="window.location.href='index.html'">⬅️</button>
+  <!-- === HTML LOGO === -->
+  <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
+    ⬅️
+  </button>
 
-  <!-- === LOGO + NAMA SMK === -->
   <div class="logo-wrapper">
     <img src="assets/Logo_SMK.png" alt="Logo SMK">
-    <div class="logo-title">SMK CENDEKIA BATUJAJARr</div>
+    <div class="logo-title">SMK Cendekia Batujajar</div>
   </div>
 
-  <!-- JUDUL HALAMAN -->
-  <h1>Pilih Mode Media Interaktif</h1>
+  <!-- === KONTEN UTAMA (tidak diubah) === -->
 
-  <!-- PILIHAN MODE -->
-  <div class="mode-container">
-    <a href="interaktif_mouse.html" class="mode">
-      <img src="assets/icon-mouse.png" alt="Mouse" />
-      Gunakan Mouse
-    </a>
+  <h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik</h2>
 
-    <a href="touch_canvas.html" class="mode">
-      <img src="assets/icon-touch.png" alt="Touchscreen" />
-      Gunakan Touchscreen
-    </a>
+  <div id="controls">
+    <button id="modeDraw">✏️ Mode Gambar</button>
+    <button id="modeClick">🖱️ Mode Klik</button>
+    <button id="undo">↩️ Undo</button>
+    <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
   </div>
+
+  <div id="canvasWrapper">
+    <div id="canvas">
+      <canvas id="drawCanvas"></canvas>
+      <div id="elements-layer"></div>
+      <div id="petunjuk">🧩 Silakan seret elemen ke area ini</div>
+    </div>
+
+    <div id="canvasKunci">
+      <h3>🔍 Susunan Benar</h3>
+      <img src="assets/kunciJawaban.png" alt="Kunci Jawaban" id="imgKunci" />
+    </div>
+  </div>
+
+  <div id="elemenContainer">
+    <h4>🎨 Elemen Setrika</h4>
+    <div id="elemenList">
+      <div class="elemen" id="elemenA" draggable="true"><img src="assets/titikA.png" alt="A" /></div>
+      <div class="elemen" id="elemenB" draggable="true"><img src="assets/titikB.png" alt="B" /></div>
+      <div class="elemen" id="elemenC" draggable="true"><img src="assets/titikC.png" alt="C" /></div>
+      <div class="elemen" id="elemenD" draggable="true"><img src="assets/titikD.png" alt="D" /></div>
+      <div class="elemen" id="elemenE" draggable="true"><img src="assets/titikE.png" alt="E" /></div>
+    </div>
+  </div>
+
+  <script src="script_mouse.js"></script>
 
 </body>
 </html>
-
