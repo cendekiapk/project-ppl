@@ -17,64 +17,54 @@
       min-height: 100vh;
     }
 
-    /* === HEADER ATAS: LOGO + TEKS SMK === */
-    .header {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px 20px;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 5;
-    }
-
-    .header img {
-      width: 55px;
-      height: 55px;
-    }
-
-    .header .title {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .title .big {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1e3a8a;
-    }
-
-    .title .small {
-      font-size: 14px;
-      color: #444;
-    }
-
-    /* === TOMBOL BACK DI BAWAH LOGO === */
+    /* === TOMBOL BACK (sama seperti index.html) === */
     #btnBack {
       position: absolute;
-      left: 20px;
-      bottom: -20px;
-      background: #2a4d8f;
+      top: 15px;
+      left: 15px;
+      background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 14px;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      z-index: 999;
       transition: 0.3s;
     }
-
     #btnBack:hover {
-      background: #1e3a6e;
+      background: #3578d3;
       transform: scale(1.05);
     }
 
-    h1 {
+    /* === LOGO + TEKS (mirip halaman index utama) === */
+    .logo-wrapper {
       margin-top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-wrapper img {
+      width: 90px;
+      height: 90px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 20px;
       text-align: center;
       color: #2a4d8f;
     }
@@ -111,20 +101,20 @@
       color: #333;
     }
 
-    /* === RESPONSIVE === */
     @media (max-width: 600px) {
-      .header img {
-        width: 45px;
-        height: 45px;
+      .logo-wrapper img {
+        width: 65px;
+        height: 65px;
       }
 
       #btnBack {
-        padding: 5px 12px;
-        font-size: 13px;
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
       }
 
-      h1 {
-        font-size: 18px;
+      .logo-text {
+        font-size: 17px;
       }
     }
   </style>
@@ -132,23 +122,19 @@
 
 <body>
 
-  <!-- LOGO + NAMA + BACK -->
-  <div class="logo-wrapper">
-    <div class="logo-row">
-      <img src="assets/Logo_SMK.png" alt="Logo SMK">
-      <span class="logo-text">SMK Cendekia Batujajar</span>
-    </div>
+  <!-- TOMBOL KEMBALI (SAMA DENGAN INDEX) -->
+  <button id="btnBack" onclick="window.location.href='index.html'">⬅️</button>
 
-    <button id="btnBack" onclick="window.location.href='index.html'">
-      ⬅ Kembali
-    </button>
+  <!-- LOGO + TEKS -->
+  <div class="logo-wrapper">
+    <img src="assets/Logo_SMK.png" alt="Logo SMK">
+    <div class="logo-text">SMK Cendekia Batujajar</div>
   </div>
 
   <h1>📖 Materi Pembelajaran</h1>
 
   <div class="slide-container">
 
-    <!-- Materi 1 -->
     <div class="slide-box">
       <iframe 
         src="https://docs.google.com/presentation/d/15m1XZshQCgoV2jzYdE8fOygQJasmonzaWT77Y3WLk04/embed?start=false&loop=false"
@@ -161,6 +147,3 @@
 
 </body>
 </html>
-
-
-
