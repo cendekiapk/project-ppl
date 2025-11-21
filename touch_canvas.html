@@ -6,239 +6,120 @@
 <title>Mode Pilih Elemen Berfungsi</title>
 
 <style>
-/* ——————————————————————————————
-   GLOBAL STYLE
-—————————————————————————————— */
-body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg,#e3f2fd,#f3f5f7);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
+  body { 
+    font-family:"Poppins",sans-serif;
+    background:linear-gradient(135deg,#e3f2fd,#f3f5f7);
+    margin:0; padding:0;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+  }
 
-/* ——————————————————————————————
-   TOMBOL BACK
-—————————————————————————————— */
-#btnBack {
-  position: absolute; 
-  top: 15px; 
-  left: 15px;
-  background: #4a90e2; 
-  color: white;
-  border: none; 
-  border-radius: 50%;
-  width: 48px; 
-  height: 48px;
-  font-size: 22px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  cursor: pointer; 
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  z-index: 999; 
-  transition: 0.3s;
-}
-#btnBack:hover { background: #3578d3; transform: scale(1.05); }
+  h2 { color:#2a4d8f; margin-top:50px; text-align:center; }
 
-/* ——————————————————————————————
-   TITLE
-—————————————————————————————— */
-h2 { 
-  color: #2a4d8f; 
-  margin-top: 70px; 
-  text-align: center; 
-}
+  #controls {
+    margin:10px; display:flex; gap:10px;
+    flex-wrap:wrap; justify-content:center;
+  }
 
-/* ——————————————————————————————
-   CONTROL BUTTONS
-—————————————————————————————— */
-#controls {
-  margin: 10px;
-  display: flex; 
-  gap: 10px; 
-  flex-wrap: wrap; 
-  justify-content: center;
-}
+  button, select {
+    padding:8px 12px; border-radius:8px;
+    border:1px solid #ccc; background:#fff;
+    cursor:pointer; font-size:15px;
+  }
 
-#controls button, 
-#controls select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  font-size: 15px;
-}
+  button.active {
+    background:#4a90e2; color:white; border-color:#3578d3;
+  }
 
-button.active { background: #4a90e2; color: white; }
+  #canvasWrapper {
+    width:100%; max-width:1200px;
+    display:flex; gap:20px;
+    flex-wrap:wrap; justify-content:center;
+    align-items:flex-start;
+  }
 
-/* ——————————————————————————————
-   CANVAS AREA
-—————————————————————————————— */
-#canvasWrapper {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-}
+  #canvasArea {
+    position:relative;
+    width:65%; min-width:320px;
+    height:480px;
+    border:2px solid #ccc;
+    border-radius:12px;
+    overflow:hidden; background:white;
+  }
 
-#canvasArea {
-  position: relative;
-  width: 65%;
-  min-width: 320px;
-  height: 480px;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  overflow: hidden;
-  background: white;
-}
+  canvas {
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    touch-action:none; user-select:none;
+    z-index:5;
+  }
 
-canvas {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  touch-action: none;
-  user-select: none;
-  z-index: 5;
-}
+  #elements-layer {
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    z-index:10; pointer-events:auto;
+  }
 
-#elements-layer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 10;
-  pointer-events: auto;
-}
+  .resizable {
+    position:absolute; touch-action:none;
+    user-select:none; display:block;
+  }
 
-.resizable {
-  position: absolute;
-  touch-action: none;
-  user-select: none;
-  display: block;
-}
-.resizable img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+  .resizable img {
+    width:100%; height:100%;
+    object-fit:contain; pointer-events:none;
+  }
 
-/* ——————————————————————————————
-   KUNCI JAWABAN
-—————————————————————————————— */
-#canvasKunci {
-  width: 30%;
-  min-width: 220px;
-  border: 2px dashed #aaa;
-  border-radius: 12px;
-  padding: 10px;
-  background: #fafafa;
-  display: none;
-  text-align: center;
-}
-#canvasKunci img { width: 100%; border-radius: 8px; }
+  #canvasKunci {
+    width:30%; min-width:220px;
+    border:2px dashed #aaa;
+    border-radius:12px;
+    padding:10px; background:#fafafa;
+    display:none; /* awal hidden */
+    text-align:center;
+  }
 
-/* ——————————————————————————————
-   ELEMEN SETRIKA
-—————————————————————————————— */
-#elemenList {
-  display: flex; gap: 10px; justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 12px; width: 100%;
-}
-.elemen {
-  width: 90px; height: 90px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-.elemen img { width: 80%; }
+  #canvasKunci img {
+    width:100%; height:auto;
+    object-fit:contain; border-radius:8px;
+  }
 
-/* ——————————————————————————————
-   CATATAN
-—————————————————————————————— */
-.note {
-  background: #e3f2fd; 
-  color: #2a4d8f;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-top: 12px;
-}
+  #elemenList {
+    display:flex; gap:10px; justify-content:center;
+    flex-wrap:wrap; margin-top:12px;
+    width:100%; max-width:1200px;
+  }
 
-/* ——————————————————————————————
-   BOTTOM SHEET TUTORIAL
-—————————————————————————————— */
-#sheetOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: none;
-  z-index: 998;
-}
+  .elemen {
+    width:90px; height:90px;
+    border:2px solid #ccc;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff; cursor:pointer;
+  }
 
-#tutorialSheet {
-  position: fixed;
-  bottom: -420px;
-  left: 0;
-  width: 100%;
-  background: #ffffff;
-  border-radius: 18px 18px 0 0;
-  padding: 20px 22px 30px;
-  box-shadow: 0 -4px 16px rgba(0,0,0,0.25);
-  z-index: 999;
-  transition: bottom 0.35s ease;
-}
+  .elemen img {
+    width:80%; height:80%; object-fit:contain;
+  }
 
-#sheetHandle {
-  width: 42px;
-  height: 5px;
-  background: #d0d0d0;
-  border-radius: 10px;
-  margin: 0 auto 12px auto;
-}
-
-#tutorialSheet h3 {
-  margin-top: 0;
-  color: #2a4d8f;
-  margin-bottom: 10px;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-#tutorialSheet ul { padding-left: 20px; }
-#tutorialSheet li { font-size: 14px; line-height: 1.45; margin-bottom: 8px; }
-
-#closeSheet {
-  margin-top: 12px; width: 100%;
-  background: #4a90e2; color: white;
-  padding: 10px; border: none; border-radius: 10px; cursor: pointer;
-}
-#closeSheet:hover { background: #3578d3; }
+  .note {
+    background:#e3f2fd; color:#2a4d8f;
+    padding:6px 10px; border-radius:8px;
+    font-size:14px; margin-top:12px;
+  }
 </style>
 </head>
 
 <body>
 
-<button id="btnBack" onclick="history.back()">⬅️</button>
-
 <h2>🧰 Media Pembelajaran: Merangkai Elemen Setrika Listrik (Touch)</h2>
 
-<!-- ——————————————————————————————
-     CONTROLS
-—————————————————————————————— -->
+<!-- ================= BUTTONS ================= -->
 <div id="controls">
   <button id="modeDraw">✏️ Mode Gambar</button>
   <button id="modeDrag" class="active">🖐️ Mode Elemen</button>
   <button id="toggleKunci">👁️ Tampilkan Kunci Jawaban</button>
   <button id="clearCanvas">🧹 Hapus Gambar & Elemen</button>
-
-  <!-- TOMBOL TUTORIAL -->
-  <button id="btnTutorial">📘 Tutorial</button>
 
   <select id="selWidth">
     <option value="6">6</option>
@@ -257,9 +138,7 @@ canvas {
   </select>
 </div>
 
-<!-- ——————————————————————————————
-     CANVAS + KUNCI
-—————————————————————————————— -->
+<!-- ================= CANVAS ================= -->
 <div id="canvasWrapper">
   <div id="canvasArea">
     <canvas id="drawCanvas"></canvas>
@@ -268,56 +147,34 @@ canvas {
 
   <div id="canvasKunci">
     <h3>🔍 Susunan Benar</h3>
-    <img src="assets/kunciJawaban.png" />
+    <img src="assets/kunciJawaban.png" alt="Kunci Jawaban" />
   </div>
 </div>
 
-<div class="note">💡 Tekan lama elemen untuk menghapus. Dua jari = zoom.</div>
+<div class="note">💡 Tekan lama elemen di kanvas untuk menghapusnya. Gunakan dua jari untuk memperbesar/memperkecil.</div>
 
-<!-- ——————————————————————————————
-     ELEMEN SETRIKA
-—————————————————————————————— -->
+<!-- ================= ELEMENT LIST ================= -->
 <h4 style="margin-top:16px">🎨 Elemen Setrika</h4>
+
 <div id="elemenList">
-  <div class="elemen"><img src="assets/titikA.png" /></div>
-  <div class="elemen"><img src="assets/titikB.png" /></div>
-  <div class="elemen"><img src="assets/titikC.png" /></div>
-  <div class="elemen"><img src="assets/titikD.png" /></div>
-  <div class="elemen"><img src="assets/titikE.png" /></div>
+  <div class="elemen"><img src="assets/titikA.png" alt="A" /></div>
+  <div class="elemen"><img src="assets/titikB.png" alt="B" /></div>
+  <div class="elemen"><img src="assets/titikC.png" alt="C" /></div>
+  <div class="elemen"><img src="assets/titikD.png" alt="D" /></div>
+  <div class="elemen"><img src="assets/titikE.png" alt="E" /></div>
 </div>
 
-<!-- ——————————————————————————————
-     BOTTOM SHEET TUTORIAL
-—————————————————————————————— -->
-<div id="tutorialSheet">
-  <div id="sheetHandle"></div>
-
-  <h3>📘 Cara Menggunakan Media Interaktif</h3>
-
-  <ul>
-    <li><b>1. Masukkan Elemen ke Kanvas</b><br>Aktifkan Mode Elemen lalu pilih elemen.</li>
-    <li><b>2. Atur & Hapus Elemen</b><br>Geser / zoom / tekan lama untuk hapus.</li>
-    <li><b>3. Gambar Jalur</b><br>Pilih Mode Gambar lalu hubungkan titik.</li>
-    <li><b>4. Hapus Garis</b><br>Gunakan tombol Hapus.</li>
-    <li><b>5. Bandingkan Dengan Kunci</b><br>Tekan Tampilkan Kunci Jawaban.</li>
-  </ul>
-
-  <button id="closeSheet">Tutup</button>
-</div>
-
-<div id="sheetOverlay"></div>
-
-<!-- ——————————————————————————————
-     SCRIPT UTAMA
-—————————————————————————————— -->
 <script>
+/* ============================================================
+   =============== SETUP CANVAS ===============================
+   ============================================================ */
 const drawCanvas = document.getElementById("drawCanvas");
 const ctx = drawCanvas.getContext("2d");
 const elementsLayer = document.getElementById("elements-layer");
+
 let mode = "drag";
 let ongoingTouches = [];
 
-/* === Resize canvas === */
 function resizeCanvas(){
   const rect = drawCanvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
@@ -330,30 +187,45 @@ function resizeCanvas(){
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-/* === Mode === */
+/* ============================================================
+   =============== MODE BUTTONS ===============================
+   ============================================================ */
 function setMode(m){
   mode = m;
   document.getElementById("modeDraw").classList.toggle("active", m==="draw");
   document.getElementById("modeDrag").classList.toggle("active", m==="drag");
+
   drawCanvas.style.pointerEvents = (m==="draw") ? "auto" : "none";
   elementsLayer.style.pointerEvents = (m==="drag") ? "auto" : "none";
 }
-document.getElementById("modeDraw").onclick = ()=> setMode("draw");
-document.getElementById("modeDrag").onclick = ()=> setMode("drag");
 
-/* === Kunci Jawaban === */
-document.getElementById("toggleKunci").onclick = ()=>{
-  const k = document.getElementById("canvasKunci");
-  k.style.display = (k.style.display==="block") ? "none" : "block";
-};
+document.getElementById("modeDraw").addEventListener("click", ()=> setMode("draw"));
+document.getElementById("modeDrag").addEventListener("click", ()=> setMode("drag"));
 
-/* === Clear === */
-document.getElementById("clearCanvas").onclick = ()=>{
+/* ============================================================
+   =============== TOGGLE KUNCI JAWABAN =======================
+   ============================================================ */
+
+// ******* FIX: STATE STABIL *******
+let kunciJawabanTerbuka = false;
+
+document.getElementById("toggleKunci").addEventListener("click", ()=>{
+  kunciJawabanTerbuka = !kunciJawabanTerbuka;
+  document.getElementById("canvasKunci").style.display = 
+    kunciJawabanTerbuka ? "block" : "none";
+});
+
+/* ============================================================
+   ==================== CLEAR SEMUA ===========================
+   ============================================================ */
+document.getElementById("clearCanvas").addEventListener("click", ()=>{
   ctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
   elementsLayer.innerHTML = "";
-};
+});
 
-/* === DRAWING === */
+/* ============================================================
+   =============== MODE GAMBAR (DRAW) =========================
+   ============================================================ */
 function copyTouch(t){ return {identifier:t.identifier, clientX:t.clientX, clientY:t.clientY}; }
 function idxById(id){ return ongoingTouches.findIndex(t=>t.identifier===id); }
 
@@ -372,27 +244,32 @@ drawCanvas.addEventListener("touchmove", e=>{
     const idx = idxById(touch.identifier);
     if(idx>=0){
       const prev = ongoingTouches[idx];
+
       ctx.beginPath();
-      ctx.moveTo(prev.clientX-rect.left, prev.clientY-rect.top);
-      ctx.lineTo(touch.clientX-rect.left, touch.clientY-rect.top);
-      ctx.lineWidth = document.getElementById("selWidth").value;
+      ctx.moveTo(prev.clientX - rect.left, prev.clientY - rect.top);
+      ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      ctx.lineWidth = parseFloat(document.getElementById("selWidth").value);
       ctx.strokeStyle = document.getElementById("selColor").value;
       ctx.stroke();
+
       ongoingTouches[idx] = copyTouch(touch);
     }
   }
 },{passive:false});
 
-drawCanvas.addEventListener("touchend", ()=> ongoingTouches=[], {passive:false});
-drawCanvas.addEventListener("touchcancel", ()=> ongoingTouches=[], {passive:false});
+drawCanvas.addEventListener("touchend", ()=> ongoingTouches=[]);
+drawCanvas.addEventListener("touchcancel", ()=> ongoingTouches=[]);
 
-/* === DRAG + ZOOM ELEMEN === */
-document.querySelectorAll(".elemen").forEach(el=>{
-  el.addEventListener("touchstart", e=>{
-    if(mode!=="drag") return;
+/* ============================================================
+   ====== DRAG, DROP, RESIZE ELEMAN (PINCH ZOOM) ==============
+   ============================================================ */
+document.querySelectorAll(".elemen").forEach(el => {
+  el.addEventListener("touchstart", e => {
+    if (mode !== "drag") return;
     e.preventDefault();
 
     const imgSrc = el.querySelector("img").src;
+
     const newEl = document.createElement("div");
     newEl.className = "resizable";
     newEl.style.left = "50px";
@@ -405,90 +282,68 @@ document.querySelectorAll(".elemen").forEach(el=>{
     newEl.appendChild(img);
 
     elementsLayer.appendChild(newEl);
+
     initTouchDragZoom(newEl);
   });
 });
 
-function initTouchDragZoom(el){
+function initTouchDragZoom(el) {
   let lastDist = null;
-  let startX=0, startY=0;
-  let moving=false;
-  let longPressTimer=null;
+  let startX = 0, startY = 0;
+  let moving = false;
+  let longPressTimer = null;
 
-  el.addEventListener("touchstart", e=>{
-    if(e.touches.length===1){
+  el.addEventListener("touchstart", e => {
+    if (e.touches.length === 1) {
       moving = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
 
-      longPressTimer = setTimeout(()=>{
-        moving=false;
-        if(confirm("Hapus elemen ini?")) el.remove();
-      },1000);
+      longPressTimer = setTimeout(() => {
+        moving = false;
+        if (confirm("Hapus elemen ini?")) el.remove();
+      }, 1000);
 
-    } else if(e.touches.length===2){
-      moving=false;
+    } else if (e.touches.length === 2) {
+      moving = false;
       lastDist = getDistance(e.touches);
       clearTimeout(longPressTimer);
     }
-  },{passive:false});
+  }, { passive: false });
 
-  el.addEventListener("touchmove", e=>{
+  el.addEventListener("touchmove", e => {
     e.preventDefault();
     clearTimeout(longPressTimer);
 
-    if(e.touches.length===1 && moving){
+    if (e.touches.length === 1 && moving) {
       const dx = e.touches[0].clientX - startX;
       const dy = e.touches[0].clientY - startY;
-
-      el.style.left = (el.offsetLeft + dx) + "px";
-      el.style.top  = (el.offsetTop  + dy) + "px";
-
+      el.style.left = el.offsetLeft + dx + "px";
+      el.style.top = el.offsetTop + dy + "px";
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
 
-    } else if(e.touches.length===2){
+    } else if (e.touches.length === 2) {
       const newDist = getDistance(e.touches);
       const scale = newDist / lastDist;
-
-      el.style.width  = (el.offsetWidth  * scale) + "px";
-      el.style.height = (el.offsetHeight * scale) + "px";
-
+      el.style.width = el.offsetWidth * scale + "px";
+      el.style.height = el.offsetHeight * scale + "px";
       lastDist = newDist;
     }
-  },{passive:false});
+  }, { passive: false });
 
   el.addEventListener("touchend", ()=>{
-    moving=false;
-    lastDist=null;
+    moving = false;
+    lastDist = null;
     clearTimeout(longPressTimer);
   });
 }
 
-function getDistance(t){
-  const dx = t[0].clientX - t[1].clientX;
-  const dy = t[0].clientY - t[1].clientY;
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
   return Math.sqrt(dx*dx + dy*dy);
 }
-
-/* ——————————————————————————————
-      SCRIPT TUTORIAL BOTTOM SHEET
-—————————————————————————————— */
-const sheet = document.getElementById("tutorialSheet");
-const overlay = document.getElementById("sheetOverlay");
-
-document.getElementById("btnTutorial").onclick = ()=>{
-  sheet.style.bottom = "0";
-  overlay.style.display = "block";
-};
-document.getElementById("closeSheet").onclick = ()=>{
-  sheet.style.bottom = "-420px";
-  overlay.style.display = "none";
-};
-overlay.onclick = ()=>{
-  sheet.style.bottom = "-420px";
-  overlay.style.display = "none";
-};
 </script>
 
 </body>
