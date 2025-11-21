@@ -33,26 +33,60 @@ body {
 /* ——————————————————————————————
    TOMBOL BACK
 —————————————————————————————— */
-#btnBack {
-  position: absolute; 
-  top: 15px; 
-  left: 15px;
-  background: var(--primary); 
-  color: white;
-  border: none; 
-  border-radius: 50%;
-  width: 48px; 
-  height: 48px;
-  font-size: 22px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  cursor: pointer; 
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  z-index: 999; 
-  transition: transform 0.22s, background 0.22s;
+/* === Wrapper Logo === */
+.logo-wrapper {
+  position: fixed;
+  top: 15px;
+  left: 75px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 999;
 }
-#btnBack:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+.logo-wrapper img {
+  height: 48px;
+}
+
+.logo-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2a4d8f;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* === Tombol kembali === */
+#btnBack {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: 0.3s;
+}
+
+#btnBack:hover {
+  background: #3578d3;
+  transform: scale(1.05);
+}
+
+
+   <div class="logo-wrapper">
+  <img src="assets/Logo_SMK.png" alt="Logo SMK">
+  <div class="logo-title">SMK CENDEKIA BATUJAJAR</div>
+</div>
 
 /* ——————————————————————————————
    TITLE
