@@ -72,7 +72,7 @@
     }
 
     /* =======================
-       JUDUL
+       JUDUL HALAMAN
     ======================= */
     h1 {
       margin-top: 100px;
@@ -82,7 +82,7 @@
     }
 
     /* =======================
-       VIDEO LIST
+       VIDEO YOUTUBE
     ======================= */
     .video-container {
       width: 90%;
@@ -90,7 +90,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 30px;
+      gap: 40px;
       margin: 30px 0;
     }
 
@@ -109,27 +109,55 @@
       border: none;
     }
 
-    p {
-      text-align: center;
-      font-size: 16px;
+    /* =======================
+       TEXT BOX DESKRIPSI
+    ======================= */
+    .desc-box {
+      width: 100%;
+      background: white;
+      border-left: 5px solid #4a90e2;
+      border-radius: 10px;
+      padding: 15px 18px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
       color: #333;
-      margin-top: -10px;
-      padding: 0 10px;
+    }
+
+    .desc-box h3 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #2a4d8f;
+    }
+
+    .desc-box p {
+      margin: 4px 0;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .desc-box span {
+      font-weight: 600;
+      color: #2a4d8f;
     }
 
     @media (max-width: 600px) {
       h1 {
         font-size: 20px;
       }
-      p {
-        font-size: 14px;
-      }
+
       .header-school span {
         font-size: 15px;
       }
       .header-school img {
         width: 36px;
         height: 36px;
+      }
+
+      .desc-box h3 {
+        font-size: 16px;
+      }
+      .desc-box p {
+        font-size: 13px;
       }
     }
   </style>
@@ -151,35 +179,58 @@
 
   <div class="video-container">
 
-    <!-- Video 1 -->
+    <!-- =======================
+         VIDEO 1
+    ======================= -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/ASBNa7b-7MQ"
               title="Prinsip Kerja Alat Elektronik: Setrika Listrik"
               allowfullscreen>
       </iframe>
     </div>
-    <p><strong>Video 1:</strong> Prinsip Kerja Alat Elektronik: Setrika Listrik</p>
 
-    <!-- Video 2 -->
+    <div class="desc-box">
+      <h3>Video 1 — Prinsip Kerja Alat Elektronik: Setrika Listrik</h3>
+      <p><span>Deskripsi:</span> Video ini menjelaskan komponen utama setrika listrik, mulai dari elemen pemanas, thermostat, lampu indikator, tapak setrika, hingga kabel dan pengaman, serta fungsi masing-masing bagian secara ringkas dan mudah dipahami.</p>
+      <p><span>Sumber:</span> YouTube – ASBNa7b-7MQ</p>
+      <p><span>Creator:</span> Risa Lutfia Pebriani</p>
+    </div>
+
+    <!-- =======================
+         VIDEO 2
+    ======================= -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/aON_if40J_8"
               title="Cara Kerja Setrika"
               allowfullscreen>
       </iframe>
     </div>
-    <p><strong>Video 2:</strong> Cara Kerja Setrika - Langsung Bisa Memperbaiki Sendiri</p>
 
-    <!-- Video 3 -->
+    <div class="desc-box">
+      <h3>Video 2 — Cara Kerja Setrika: Langsung Bisa Memperbaiki Sendiri</h3>
+      <p><span>Deskripsi:</span> Video ini memaparkan cara kerja setrika listrik, mulai dari aliran listrik ke elemen pemanas hingga pengaturan suhu oleh thermostat, sehingga mudah dipahami saat mempelajari dasar perbaikan setrika.</p>
+      <p><span>Sumber:</span> YouTube – aON_if40J_8</p>
+      <p><span>Creator:</span> Guru Elektronika</p>
+    </div>
+
+    <!-- =======================
+         VIDEO 3
+    ======================= -->
     <div class="video-box">
       <iframe src="https://www.youtube.com/embed/SJ739--Vc3A"
               title="Mengapa setrika otomatis bisa mempertahankan suhu?"
               allowfullscreen>
       </iframe>
     </div>
-    <p><strong>Video 3:</strong> Mengapa setrika otomatis bisa mempertahankan suhu?</p>
+
+    <div class="desc-box">
+      <h3>Video 3 — 60 Detik Pesona Ilmu</h3>
+      <p><span>Deskripsi:</span> Video ini menjelaskan secara ringkas bagaimana setrika otomatis dapat mempertahankan suhu yang diinginkan melalui kerja thermostat yang memutus dan menyambung aliran listrik sesuai perubahan suhu.</p>
+      <p><span>Sumber:</span> YouTube – SJ739--Vc3A</p>
+      <p><span>Creator:</span> PesonaEdu</p>
+    </div>
 
   </div>
 
 </body>
 </html>
-
