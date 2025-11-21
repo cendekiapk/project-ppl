@@ -4,46 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Materi Pembelajaran</title>
-
   <style>
-    /* === LOGO + NAMA SMK === */
-    .logo-wrapper {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+    /* === Gaya dasar halaman === */
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f3f5f7);
+      margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      z-index: 999;
-    }
-
-    .logo-row {
-      display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
 
-    .logo-row img {
-      height: 55px;
-    }
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-      color: #2a4d8f;
-    }
-
-    /* === BUTTON BACK DI BAWAH LOGO === */
+    /* === Tombol kembali === */
     #btnBack {
+      position: fixed;
+      top: 15px;
+      left: 15px;
       background: #4a90e2;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 15px;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
       transition: 0.3s;
     }
 
@@ -52,55 +44,129 @@
       transform: scale(1.05);
     }
 
-    #btnBack i {
-      pointer-events: none;
+    /* === Logo + Nama Sekolah === */
+    .logo-wrapper {
+      position: fixed;
+      top: 15px;
+      left: 75px; /* memberi ruang untuk tombol kembali */
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 999;
     }
 
-    /* Tambah sedikit margin top agar konten tidak tertutup logo */
-    body {
-      padding-top: 120px;
+    .logo-wrapper img {
+      height: 48px;
     }
 
+    .logo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2a4d8f;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* === Judul utama === */
+    h1 {
+      margin-top: 100px;
+      color: #2a4d8f;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    /* === Container slide === */
+    .slide-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* === Kotak slide === */
+    .slide-box {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: #000;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* === Teks deskripsi materi === */
+    p {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+      margin-top: -10px;
+    }
+
+    /* === Responsif untuk layar kecil === */
     @media (max-width: 600px) {
-      .logo-row img {
-        height: 45px;
+      h1 {
+        font-size: 18px;
+        margin-top: 60px;
       }
-      .logo-text {
+
+      .slide-container {
+        gap: 25px;
+      }
+
+      p {
+        font-size: 14px;
+        margin-top: -5px;
+      }
+
+      #btnBack {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+      }
+
+      .logo-wrapper img {
+        height: 40px;
+      }
+
+      .logo-title {
         font-size: 17px;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- LOGO + NAMA + BACK -->
-  <div class="logo-wrapper">
-    <div class="logo-row">
-      <img src="assets/Logo_SMK.png" alt="Logo SMK">
-      <span class="logo-text">SMK Cendekia Batujajar</span>
-    </div>
+  <!-- Tombol kembali ke dashboard -->
+  <button id="btnBack" title="Kembali ke Menu Utama" onclick="window.location.href='index.html'">
+    ⬅️
+  </button>
 
-    <button id="btnBack" onclick="window.location.href='index.html'">
-      ⬅ Kembali
-    </button>
+  <!-- Logo + Nama SMK -->
+  <div class="logo-wrapper">
+    <img src="assets/Logo_SMK.png" alt="Logo SMK">
+    <div class="logo-title">SMK Cendekia Batujajar</div>
   </div>
 
   <h1>📖 Materi Pembelajaran</h1>
 
   <div class="slide-container">
-
+    <!-- Slide Google Materi 1 -->
     <div class="slide-box">
       <iframe 
-        src="https://docs.google.com/presentation/d/15m1XZshQCgoV2jzYdE8fOygQJasmonzaWT77Y3WLk04/embed?start=false&loop=false"
-        allowfullscreen>
+        src="https://docs.google.com/presentation/d/15m1XZshQCgoV2jzYdE8fOygQJasmonzaWT77Y3WLk04/embed?start=false&loop=false&delayms=3000"
+        allowfullscreen
+        title="Slide Materi 1">
       </iframe>
     </div>
     <p>Materi 1: Setrika Listrik</p>
 
   </div>
-
 </body>
 </html>
-
-
